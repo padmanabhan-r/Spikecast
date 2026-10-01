@@ -1,0 +1,25 @@
+# Leaky integrate-and-fire constants, copied verbatim from the reference model:
+#   philshiu/Drosophila_brain_model, model.py, `default_params` (lines 15-41)
+#   commit 91bdd1e7dcf193f3e7ca5a8933497fcef63b7960
+#   Shiu et al. 2024, Nature, doi:10.1038/s41586-024-07763-9
+#
+# Do not tune these. A deviation goes under `deviations:` with the reason, and in
+# docs/REAL_VS_MODELLED.md.
+#
+# Units: mV, ms, Hz.
+
+v_0: -52.0      # resting potential. Kakaria & de Bivort 2017, doi:10.3389/fnbeh.2017.00008
+v_rst: -52.0    # reset potential after a spike. Same source.
+v_th: -45.0     # spike threshold. Same source.
+t_mbr: 20.0     # membrane time constant (0.002 uF x 10 MOhm). Same source.
+tau: 5.0        # synaptic time constant. Jürgensen et al. 2021, doi:10.1088/2634-4386/ac3ba6
+t_rfc: 2.2      # refractory period. Lazar et al. 2021, doi:10.7554/eLife.62362
+t_dly: 1.8      # synaptic delay. Paul et al. 2015, doi:10.3389/fncel.2015.00029
+w_syn: 0.275    # weight per synapse. The reference model's one free parameter.
+r_poi: 150.0    # default rate of Poisson input.
+f_poi: 250      # Poisson input weight = w_syn x f_poi; "250 is sufficient to cause spiking".
+
+# Simulation time step. The reference runs Brian2 at its default of 0.1 ms.
+dt: 0.1
+
+deviations: []

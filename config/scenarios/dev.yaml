@@ -1,0 +1,31 @@
+# Development scenario: the four beats, short. Not the film.
+name: dev
+title: Development run
+frame_hz: 60
+scenes:
+  - id: punish
+    title: Odor A comes with a shock
+    arena: dish
+    duration_s: 8
+    fly: {x: -8, y: -3, heading_deg: 20}
+    odors: [{odor: A, uniform: true, start_s: 1.5, end_s: 7.5}]
+    shock: [3.0, 7.0]
+  - id: reward
+    title: Odor B comes with sugar
+    arena: dish
+    duration_s: 8
+    fly: {x: -10, y: 2, heading_deg: -8}
+    odors: [{odor: B, uniform: true, start_s: 1.0, end_s: 7.5}]
+    patches: [{kind: sugar, x: 0, y: 0, r: 10.0, start_s: 2.0, end_s: 6.5}]
+  - id: tmaze
+    title: The choice
+    arena: tmaze
+    duration_s: 12
+    fly: {x: 0, y: -19, heading_deg: 90}
+    odors: [{odor: A, arm: left}, {odor: B, arm: right}]
+  - id: looming
+    title: A threat
+    arena: dish
+    duration_s: 5
+    fly: {x: -8, y: -3, heading_deg: 10}
+    loom: {start_s: 2.0, duration_s: 1.2, bearing_deg: 10}

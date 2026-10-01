@@ -1,0 +1,185 @@
+@import "@fontsource/hanken-grotesk/400.css";
+@import "@fontsource/hanken-grotesk/400-italic.css";
+@import "@fontsource/hanken-grotesk/500.css";
+@import "./tokens.css";
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
+}
+
+body.doc {
+  background: var(--ground);
+  color: var(--ink);
+  font-family: var(--font);
+  font-size: 1.0625rem;
+  line-height: 1.62;
+}
+
+#doc-head {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  display: flex;
+  gap: 2rem;
+  align-items: baseline;
+  padding: 1rem clamp(1rem, 5vw, 4rem);
+  background: color-mix(in srgb, var(--ground) 88%, transparent);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid color-mix(in srgb, var(--ink) 10%, transparent);
+}
+
+#doc-head > a {
+  font-weight: 500;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+#doc-nav {
+  display: flex;
+  gap: 1.3rem;
+  overflow-x: auto;
+  white-space: nowrap;
+  font-size: 0.9rem;
+  scrollbar-width: none;
+}
+
+#doc-nav a {
+  color: var(--ink-dim);
+  text-decoration: none;
+}
+
+#doc-nav a:hover,
+#doc-nav a:focus-visible {
+  color: var(--ink);
+}
+
+#doc {
+  max-width: 46rem;
+  margin: 0 auto;
+  padding: clamp(2rem, 6vw, 5rem) clamp(1rem, 5vw, 2rem) 8rem;
+}
+
+#doc h1 {
+  font-weight: 500;
+  font-size: clamp(2.2rem, 6vw, 3.6rem);
+  line-height: 1.04;
+  letter-spacing: -0.025em;
+  margin-bottom: 1.5rem;
+}
+
+#doc h2 {
+  font-weight: 500;
+  font-size: clamp(1.5rem, 3.4vw, 2rem);
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+  margin: 4rem 0 1rem;
+  padding-top: 1.6rem;
+  border-top: 1px solid color-mix(in srgb, var(--ink) 12%, transparent);
+}
+
+#doc h3 {
+  font-weight: 500;
+  font-size: 1.15rem;
+  margin: 2.2rem 0 0.6rem;
+  color: var(--neuron-rest);
+}
+
+#doc p,
+#doc ul,
+#doc ol {
+  margin-bottom: 1.1rem;
+  color: color-mix(in srgb, var(--ink) 86%, var(--ink-dim));
+}
+
+#doc h1 + p {
+  font-size: 1.2rem;
+  color: var(--ink-dim);
+}
+
+#doc ul,
+#doc ol {
+  padding-left: 1.3rem;
+}
+
+#doc li {
+  margin-bottom: 0.5rem;
+}
+
+#doc strong {
+  font-weight: 500;
+  color: var(--ink);
+}
+
+#doc a {
+  color: var(--neuron-rest);
+}
+
+#doc code {
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 0.86em;
+  color: var(--ink);
+  background: color-mix(in srgb, var(--ink) 8%, transparent);
+  padding: 0.1em 0.35em;
+  border-radius: 0.25em;
+}
+
+#doc .scroll {
+  overflow-x: auto;
+  margin: 1.4rem 0 1.8rem;
+}
+
+#doc pre {
+  padding: 1.1rem 1.3rem;
+  background: color-mix(in srgb, var(--ink) 5%, transparent);
+  border-radius: 0.5rem;
+  line-height: 1.45;
+  width: max-content;
+  min-width: 100%;
+}
+
+#doc pre code {
+  background: none;
+  padding: 0;
+  font-size: 0.82rem;
+  color: color-mix(in srgb, var(--ink) 88%, var(--ink-dim));
+}
+
+#doc table {
+  border-collapse: collapse;
+  width: 100%;
+  min-width: 30rem;
+  font-size: 0.96rem;
+}
+
+#doc th {
+  text-align: left;
+  font-weight: 500;
+  color: var(--ink);
+  padding: 0.6rem 1rem 0.6rem 0;
+  border-bottom: 1px solid color-mix(in srgb, var(--ink) 30%, transparent);
+  vertical-align: bottom;
+}
+
+#doc td {
+  padding: 0.6rem 1rem 0.6rem 0;
+  border-bottom: 1px solid color-mix(in srgb, var(--ink) 9%, transparent);
+  vertical-align: top;
+  color: color-mix(in srgb, var(--ink) 82%, var(--ink-dim));
+}
+
+::selection {
+  background: var(--neuron-rest);
+  color: var(--ground);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}

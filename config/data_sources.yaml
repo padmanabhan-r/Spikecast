@@ -1,0 +1,32 @@
+# Files fetched by scripts/fetch_data.py into data/raw/. Nothing here is committed to the repo.
+# Each source is pinned to a commit or tag, and to a sha256 recorded on first fetch
+# (`uv run python scripts/fetch_data.py --record`). A later fetch that does not match fails.
+#
+# Licence: the connectome data is treated as CC BY-NC 4.0. See DATA_LICENSE.md.
+
+sources:
+  - name: completeness
+    dest: Completeness_783.csv
+    url: https://raw.githubusercontent.com/philshiu/Drosophila_brain_model/91bdd1e7dcf193f3e7ca5a8933497fcef63b7960/Completeness_783.csv
+    sha256: bbb847a4cc2caaa7a16349722d220c087317b946d148d4d592d94d250617a311
+    note: Neuron list for FlyWire v783. Row order is the engine index.
+
+  - name: connectivity
+    dest: Connectivity_783.parquet
+    url: https://raw.githubusercontent.com/philshiu/Drosophila_brain_model/91bdd1e7dcf193f3e7ca5a8933497fcef63b7960/Connectivity_783.parquet
+    sha256: efeb23fb99098e9c390f6869969b2a121a2ee92c833cfc45ecb2c1d8e1af0347
+    note: Signed connections (synapse count x excitatory/inhibitory sign) for v783.
+
+  - name: annotations
+    dest: Supplemental_file1_neuron_annotations.tsv
+    url: https://raw.githubusercontent.com/flyconnectome/flywire_annotations/v3.2.0/supplemental_files/Supplemental_file1_neuron_annotations.tsv
+    sha256: b214970b55d2fbe0853bba536fdcb9e28730f4eb7ab06f600491df795da683cd
+    note: Cell types, classes, sides, neurotransmitters and positions. Tag v3.2.0.
+
+  # The published reference model (MIT). Fetched, not vendored: used only by
+  # scripts/m0_validate.py to produce ground truth, never imported by the app.
+  - name: reference_model
+    dest: reference/model.py
+    url: https://raw.githubusercontent.com/philshiu/Drosophila_brain_model/91bdd1e7dcf193f3e7ca5a8933497fcef63b7960/model.py
+    sha256: fc45837d7122c6ce2a7f3f2f23c515992e4b232aadb919efabb72337fac88e4e
+    note: Reference Brian2 LIF implementation.

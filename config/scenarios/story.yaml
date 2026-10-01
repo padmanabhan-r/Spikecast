@@ -1,0 +1,47 @@
+# The story, in the order a first-time viewer can follow: test the fly, teach it, test it
+# again from the very same start. The script places things and sets the clock. It never
+# tells the fly what to do.
+#
+# `wander_seed` gives both maze tests the same random wander, so the fly sets off the same
+# way each time and any difference in where it goes comes from what its brain has learned.
+# The seed was chosen (scripts/scout_wander.py) for a walk that takes an untrained fly into
+# the pink arm; that choice is about staging, and it is the same for the learning-off twin.
+name: story
+title: Can a simulated brain learn?
+frame_hz: 60
+scenes:
+  - id: before
+    step: Before
+    title: Before the lesson
+    note: A fly that has never met these smells. Which way does it go?
+    arena: tmaze
+    duration_s: 12
+    wander_seed: 381
+    fly: {x: 0, y: -19, heading_deg: 90}
+    odors: [{odor: A, arm: left}, {odor: B, arm: right}]
+  - id: lesson
+    step: The lesson
+    title: The pink smell comes with a shock
+    note: Now the pink smell fills the dish, and with it comes a shock.
+    arena: dish
+    duration_s: 14
+    fly: {x: -9, y: -3, heading_deg: 20}
+    odors: [{odor: A, uniform: true, start_s: 1.5, end_s: 12.5}]
+    shock: [5.0, 10.0]
+  - id: after
+    step: After
+    title: After the lesson
+    note: Same fly, same maze, same start. Does it remember?
+    arena: tmaze
+    duration_s: 12
+    wander_seed: 381
+    fly: {x: 0, y: -19, heading_deg: 90}
+    odors: [{odor: A, arm: left}, {odor: B, arm: right}]
+  - id: reflex
+    step: A reflex
+    title: A reflex nobody taught it
+    note: A shadow rushes at the fly. This one is wired in.
+    arena: dish
+    duration_s: 7
+    fly: {x: -8, y: -3, heading_deg: 10}
+    loom: {start_s: 3.0, duration_s: 1.2, bearing_deg: 10}

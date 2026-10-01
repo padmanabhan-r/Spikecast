@@ -1,0 +1,54 @@
+/* Spikecast design tokens: the Dark-field direction.
+   Source of truth until DESIGN.md is written from the built viewer (after M1):
+   .impeccable/surfaces/web-index-html.md and design/comps/darkfield.png. */
+
+:root {
+  /* Ground and ink */
+  --ground: #05070d;
+  --ink: #eaf2f7;
+  --ink-dim: #8fa3b3;
+
+  /* One meaning per colour, for the whole film. Never more than three accents on screen. */
+  --neuron-rest: #3fb6e0; /* neurons at rest */
+  --odor-a: #ff3fb4; /* odor A, the punished odor */
+  --odor-b: #ffb02e; /* odor B, the rewarded odor */
+  --punish: #ff5a2a; /* PPL1 dopamine, punishment */
+  --reward: #ffd24a; /* PAM dopamine, reward */
+  --escape: #ffffff; /* giant-fiber takeoff */
+
+  /* Type: Hanken Grotesk. 500 for captions, italic 400 for labels. */
+  --font: "Hanken Grotesk", system-ui, sans-serif;
+  --caption-size: 60px; /* at 1080 wide; 56-64 allowed */
+  --caption-leading: 1.12;
+  --caption-tracking: -0.015em;
+  --caption-weight: 500;
+  --label-size: 24px;
+  --note-size: 20px;
+
+  /* Motion: spikes are fast, learning is slow and heavy. Nothing is linear. */
+  --spike-decay: 120ms;
+  --learn-duration: 1000ms;
+  --camera-move: 600ms;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+
+  /* Film grain over the whole frame */
+  --grain-opacity: 0.07;
+
+  /* Frame gutter */
+  --gutter: 48px;
+}
+
+/* Stacked layouts: brain / caption band / arena, as fractions of the frame height. */
+#frame[data-layout="4x5"] {
+  --brain-h: 50%;
+  --band-h: 11%;
+  --arena-h: 39%;
+}
+
+/* 9:16 gives the captions more headroom, per PLAN.md 11.4. Not comped. */
+#frame[data-layout="9x16"] {
+  --brain-h: 47%;
+  --band-h: 13%;
+  --arena-h: 40%;
+}

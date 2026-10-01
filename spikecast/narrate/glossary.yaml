@@ -1,0 +1,136 @@
+# The cell types the narrator may name, and the only things it may say they do.
+#
+#   name      how the narrator may refer to it
+#   aliases   other strings that count as a mention of it (matched case-insensitively)
+#   nickname  a plain-English handle for a general audience
+#   role      one line. The narrator may not claim more than this.
+#   status    real      the group and its wiring come from the connectome
+#             driven    real neurons, but our stimulus model sets their firing directly
+#   source    literature for the role
+#
+# Every role here is checked by the neuro-fact-checker agent before it is narrated; the
+# result is recorded in docs/NARRATOR_GROUNDING.md.
+
+cells:
+  odor_a_pn:
+    name: smell A projection neurons
+    aliases: [projection neurons, smell neurons, odor A input]
+    nickname: the smell A channel
+    role: Relay neurons that carry smell A from the antennal lobe to the mushroom body.
+    status: driven
+    source: Schlegel et al. 2024 (PN types). Which glomeruli stand for smell A is our choice.
+
+  odor_b_pn:
+    name: smell B projection neurons
+    aliases: [projection neurons, smell neurons, odor B input]
+    nickname: the smell B channel
+    role: Relay neurons that carry smell B from the antennal lobe to the mushroom body.
+    status: driven
+    source: Schlegel et al. 2024 (PN types). Which glomeruli stand for smell B is our choice.
+
+  kc:
+    name: Kenyon cells
+    aliases: [Kenyon cell, KC, KCs]
+    nickname: the smell code
+    role: >-
+      Mushroom body neurons; each smell activates a small, partly overlapping set of them,
+      roughly one in ten.
+    status: real
+    source: Aso et al. 2014; Honegger et al. 2011; Lin et al. 2014.
+
+  mbon_approach:
+    name: approach outputs
+    aliases: [approach output neurons, approach-labelled outputs, approach MBONs, MBONs, output neurons]
+    nickname: the outputs we label approach
+    role: >-
+      Mushroom body output neurons in the punishment zones. "Approach" is this project's
+      label, read from their dopamine wiring; in this model punishment weakens the synapses
+      they receive from active Kenyon cells. Say "the outputs labelled approach", never that
+      these neurons make the fly approach.
+    status: real
+    source: >-
+      Aso et al. 2014 (compartments, valence); Hige et al. 2015 (dopamine-gated depression of
+      KC to MBON synapses). The approach/avoid split is our reading of the dopamine wiring:
+      it matches the best-studied types and mislabels others (MBON-gamma3, gamma3beta'1 and
+      beta'1 sit in reward zones yet drove attraction in Aso et al. 2014), and most of the 96
+      have no measured valence.
+
+  mbon_avoid:
+    name: avoid outputs
+    aliases: [avoid output neurons, avoid-labelled outputs, avoid MBONs, MBONs, output neurons]
+    nickname: the outputs we label avoid
+    role: >-
+      Mushroom body output neurons in the reward zones. "Avoid" is this project's label, read
+      from their dopamine wiring; in this model reward weakens the synapses they receive from
+      active Kenyon cells. Say "the outputs labelled avoid", never that these neurons make
+      the fly avoid.
+    status: real
+    source: >-
+      Aso et al. 2014; Owald et al. 2015 (reward depresses odor drive to avoidance MBONs).
+      The approach/avoid split is our reading of the dopamine wiring.
+
+  ppl1:
+    name: PPL1 dopamine neurons
+    aliases: [PPL1, punishment dopamine neurons]
+    nickname: the punishment signal
+    role: Dopamine neurons that mostly carry punishment signals to the mushroom body.
+    status: driven
+    source: Aso et al. 2012; Aso et al. 2014; Claridge-Chang et al. 2009.
+
+  pam:
+    name: PAM dopamine neurons
+    aliases: [PAM, reward dopamine neurons]
+    nickname: the reward signal
+    role: Dopamine neurons that mostly carry reward signals to the mushroom body.
+    status: driven
+    source: Liu et al. 2012; Burke et al. 2012; Aso et al. 2014.
+
+  sugar_grn:
+    name: sugar taste neurons
+    aliases: [sugar-sensing neurons, sweet taste neurons, taste neurons, gustatory neurons]
+    nickname: the sweet sensors
+    role: Taste neurons from the mouthparts that are classed as sugar-sensing.
+    status: driven
+    source: Tastekin et al. 2026 (taste modality annotation); Shiu et al. 2024.
+
+  mn9:
+    name: MN9
+    aliases: [MN9 motor neuron, motor neuron 9, proboscis motor neuron]
+    nickname: the feeding motor neuron
+    role: >-
+      Motor neuron that lifts the first segment of the proboscis, the opening move of
+      feeding; it fires when sugar taste neurons are active.
+    status: real
+    source: Shiu et al. 2024; Gordon & Scott 2009; McKellar et al. 2020.
+
+  lc4:
+    name: LC4
+    aliases: [LC4 neurons, LC4 visual neurons]
+    nickname: looming detectors
+    role: Visual projection neurons that respond to fast looming and excite the giant fiber.
+    status: driven
+    source: von Reyn et al. 2017; Ache et al. 2019.
+
+  lplc2:
+    name: LPLC2
+    aliases: [LPLC2 neurons, LPLC2 visual neurons]
+    nickname: looming detectors
+    role: Visual projection neurons selective for an object expanding outward; they excite the giant fiber.
+    status: driven
+    source: Klapoetke et al. 2017; Ache et al. 2019.
+
+  dnp01:
+    name: giant fiber
+    aliases: [giant fibre, giant fiber neurons, giant fibers, DNp01]
+    nickname: the escape trigger
+    role: A pair of giant descending neurons; when one fires, the fly launches its fastest take-off.
+    status: real
+    source: von Reyn et al. 2014; Tanouye & Wyman 1980.
+
+regions:
+  mushroom body:
+    role: A main centre of the fly brain for linking smells to punishment and reward.
+    source: Heisenberg 2003; Aso et al. 2014.
+  antennal lobe:
+    role: The first smell-processing region, where projection neurons start.
+    source: Wilson 2013.

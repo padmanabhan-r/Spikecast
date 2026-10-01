@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="A fly on a road, with a simulated brain, and Jev choosing its actions." />
+    <title>Spikecast</title>
+  </head>
+  <body>
+    <main id="frame" data-layout="16x9" data-chrome="on">
+      <canvas id="brain" aria-label="The fly's brain: every point is one neuron"></canvas>
+      <div id="band"><p id="caption" aria-live="polite"></p></div>
+      <canvas id="arena" aria-label="The fly in its arena"></canvas>
+
+      <a id="wordmark" href="/">Spikecast</a>
+      <span id="scene" class="label"></span>
+      <span id="region" class="label"></span>
+      <div id="scale"><span>100 µm</span></div>
+      <span id="odor" class="label"></span>
+      <span id="modelled" class="label"></span>
+
+      <section id="story" hidden>
+        <ol id="story-steps"></ol>
+        <p id="story-question"></p>
+        <svg id="story-wire" aria-hidden="true"><line id="story-link" /></svg>
+        <p id="story-now"></p>
+        <div id="jev">
+          <span id="jev-label"><b id="jev-who">Jev</b> steers, seeing only the brain's outputs</span>
+          <strong id="jev-choice">Waiting for a smell</strong>
+          <i><b id="jev-fill"></b></i>
+          <span id="jev-reads"></span>
+        </div>
+        <p id="story-brain-note">
+          Inside its head: 138,639 simulated neurons, wired as they were mapped in a real fly.
+        </p>
+        <div id="memory">
+          <span>What its brain has stored about the pink smell</span>
+          <i><b id="memory-fill"></b></i>
+          <span><strong id="memory-word">no opinion yet</strong> · approach synapses at <span id="memory-value">100%</span></span>
+        </div>
+        <canvas id="twin" hidden aria-label="A twin fly with learning switched off"></canvas>
+        <p id="twin-note" hidden>Its twin, with learning switched off</p>
+      </section>
+
+      <section id="hud" hidden>
+        <svg id="hud-wire" aria-hidden="true"><line id="hud-link" /></svg>
+        <div id="hud-card">
+          <p class="kicker" id="hud-who">Jev decides</p>
+          <strong id="hud-action">Waiting</strong>
+          <span id="hud-neuron"></span>
+          <div id="hud-bars"></div>
+          <p class="kicker">Memory, in the brain's synapses</p>
+          <div class="mem">
+            <div><span><i class="dot toxic"></i>Toxic smell</span><span id="mem-a-text">neutral</span></div>
+            <div class="track"><b class="mid"></b><b class="knob" id="mem-a-knob"></b></div>
+          </div>
+          <div class="mem">
+            <div><span><i class="dot honey"></i>Honey smell</span><span id="mem-b-text">neutral</span></div>
+            <div class="track"><b class="mid"></b><b class="knob" id="mem-b-knob"></b></div>
+          </div>
+          <dl id="hud-stats">
+            <div><dd id="stat-pain">no</dd><dt>pain</dt></div>
+            <div><dd id="stat-fed">0%</dd><dt>fed</dt></div>
+            <div><dd id="stat-distance">0</dd><dt>body lengths</dt></div>
+            <div><dd id="stat-decisions">0</dd><dt>decisions</dt></div>
+          </dl>
+        </div>
+        <p id="hud-brain-note">
+          Inside its head: 138,639 simulated neurons, wired as they were mapped in a real fly.
+          Every flash is one of them firing.
+        </p>
+      </section>
+      <p id="beat" hidden></p>
+
+      <section id="card" hidden>
+        <h1 id="card-title"></h1>
+        <p id="card-body"></p>
+        <div id="card-actions"></div>
+        <p id="card-credits"></p>
+      </section>
+
+      <aside id="diagnostics" hidden>
+        <canvas id="raster" aria-label="Firing rates of the main neuron groups over time"></canvas>
+        <div id="meters"></div>
+        <p id="status"></p>
+      </aside>
+
+      <nav id="help" hidden></nav>
+
+      <section id="home" hidden>
+        <p class="kicker">Spikecast</p>
+        <h1>A fly with a simulated brain, and Jev at the controls.</h1>
+        <p class="lede">
+          138,639 neurons, wired the way they were mapped in a real fly, run as a spiking
+          simulation. The brain senses and remembers. Jev reads it and picks the next action,
+          from eight rules we wrote.
+        </p>
+        <ul id="home-actions"></ul>
+        <p class="fine" id="home-note"></p>
+      </section>
+    </main>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

@@ -1,0 +1,190 @@
+# Named neuron groups. scripts/build_derived.py resolves each one to engine indices
+# (data/derived/groups.json) from the FlyWire annotations, tag v3.2.0.
+#
+# Schema, per group:
+#   select            filters over annotation columns, all ANDed. A value may be a list.
+#                     `cell_type_regex` matches the cell_type column with a full regex.
+#   split_by_side     also emit <name>_L and <name>_R from the `side` column
+#   expect            {min, max} neurons. The build fails outside it. Ranges here were read
+#                     from scripts/circuit_lookup.py on v3.2.0, not guessed.
+#   anchor_root_ids   root IDs that must be in the group (a sanity check, not the definition)
+#   status            real      = the group and its wiring come from the connectome
+#                     modelled  = choosing or driving this group is our assumption
+#   role              one line, plain English
+#   source            literature for the role
+#
+# Rules for editing this file: the `circuits` skill.
+# The `source` entries have not yet been through the neuro-fact-checker agent. They must be
+# before any of them is narrated (M4).
+
+groups:
+  # ---- Inputs -------------------------------------------------------------------------
+
+  sugar_grn:
+    select: {cell_class: gustatory, cell_sub_class: [sugar, sugar/low_salt]}
+    expect: {min: 50, max: 65}
+    status: real
+    role: Labellar taste neurons that detect sugar.
+    source: Tastekin et al. 2026 (taste modality annotation); Shiu et al. 2024 (sugar to MN9).
+
+  bitter_grn:
+    select: {cell_class: gustatory, cell_sub_class: bitter}
+    expect: {min: 35, max: 50}
+    status: real
+    role: Labellar taste neurons that detect bitter compounds.
+    source: Tastekin et al. 2026.
+
+  # The two odors are synthetic. Each is a fixed set of glomeruli chosen by us from those that
+  # are not pheromone (DA1, VA1d, VA1v, DL3), CO2 (V) or thermo/hygro (VP) glomeruli. Odor A
+  # was picked first; odor B was then searched for among the remaining glomeruli so that it
+  # stays distinct from A at the Kenyon cells, drives both approach-class and avoid-class MBONs
+  # in both hemispheres, and has a naive response of similar size to A's (most sets drive no MBONs).
+  # That search is a stimulus design choice, recorded in docs/M3_REPORT.md. The projection
+  # neurons' own firing is set by the stimulus model (config/model.yaml); everything
+  # downstream of them is real wiring.
+  odor_a_pn:
+    select:
+      cell_class: ALPN
+      cell_sub_class: uniglomerular
+      cell_type_regex: "(DM1|DM2|DM3|DM4|VA2|VM2)_.*PN"
+    split_by_side: true
+    expect: {min: 14, max: 22}
+    status: modelled
+    role: Projection neurons of the six glomeruli that stand for odor A.
+    source: Odor identity is our assumption. PN types from Schlegel et al. 2024.
+
+  odor_b_pn:
+    select:
+      cell_class: ALPN
+      cell_sub_class: uniglomerular
+      cell_type_regex: "(DC4|DL2v|DP1l|DP1m|VA4|VC2|VC3|VM3)_.*PN"
+    split_by_side: true
+    expect: {min: 32, max: 40}
+    status: modelled
+    role: Projection neurons of the eight glomeruli that stand for odor B.
+    source: Odor identity is our assumption. PN types from Schlegel et al. 2024.
+
+  lc4:
+    select: {cell_type: LC4}
+    split_by_side: true
+    expect: {min: 95, max: 115}
+    status: real
+    role: Visual projection neurons that respond to fast looming.
+    source: von Reyn et al. 2017; Ache et al. 2019.
+
+  lplc2:
+    select: {cell_type: LPLC2}
+    split_by_side: true
+    expect: {min: 195, max: 225}
+    status: real
+    role: Visual projection neurons selective for objects expanding outward.
+    source: Klapoetke et al. 2017; Ache et al. 2019.
+
+  pn_all:
+    select: {cell_class: ALPN}
+    expect: {min: 680, max: 690}
+    status: real
+    role: Every antennal lobe projection neuron. Used to apply config/model.yaml.
+    source: Schlegel et al. 2024.
+
+  # ---- Dopamine: the teaching signals -------------------------------------------------
+
+  # PPL101 to PPL106 are the six PPL1 types that innervate the mushroom body. The annotations
+  # also list PPL107 and PPL108 as PPL1; those four neurons make no synapses onto Kenyon cells
+  # in the connectome (checked 2026-10-01), so they are left out.
+  ppl1:
+    select: {cell_class: DAN, cell_type_regex: "PPL10[1-6]"}
+    expect: {min: 12, max: 12}
+    status: real
+    role: Dopamine neurons that mostly signal punishment to the mushroom body.
+    source: >-
+      Aso et al. 2012; Aso et al. 2014; Claridge-Chang et al. 2009. Exceptions: PPL1-alpha'3
+      signals novelty (Hattori et al. 2017).
+
+  pam:
+    select: {cell_class: DAN, cell_type_regex: "PAM\\d+.*"}
+    expect: {min: 280, max: 330}
+    status: real
+    role: Dopamine neurons that mostly signal reward to the mushroom body.
+    source: >-
+      Liu et al. 2012; Burke et al. 2012; Aso et al. 2014. Exceptions: PAM-beta2beta'2a and
+      PAM-gamma3 can write aversive memory (Aso et al. 2012; Yamagata et al. 2016).
+
+  # ---- Mushroom body ------------------------------------------------------------------
+
+  kc:
+    select: {cell_class: Kenyon_Cell}
+    expect: {min: 5000, max: 5300}
+    status: real
+    role: Kenyon cells, which carry a sparse code for each odor.
+    source: >-
+      Honegger et al. 2011 (about 5% respond to an odor); Lin et al. 2014 (5 to 10%);
+      Aso et al. 2014; Schlegel et al. 2024.
+
+  mbon:
+    select: {cell_class: MBON}
+    split_by_side: true
+    expect: {min: 90, max: 100}
+    status: real
+    role: Mushroom body output neurons, which read the Kenyon cell code.
+    source: Aso et al. 2014.
+
+  apl:
+    select: {cell_type: APL, cell_class: MBIN}
+    expect: {min: 2, max: 2}
+    status: real
+    # In real flies APL keeps the Kenyon cell code sparse. In the unmodified model the code is
+    # not sparse (docs/M0_REPORT.md), so never narrate APL as doing that here.
+    role: One wide inhibitory neuron per hemisphere, wired both ways with the Kenyon cells.
+    source: Lin et al. 2014; Liu & Davis 2009.
+
+  dpm:
+    select: {cell_type: DPM, cell_class: MBIN}
+    expect: {min: 2, max: 2}
+    status: real
+    # A modulator in real flies. The signed connectivity makes all its output fast excitation.
+    role: One wide neuron per hemisphere, wired both ways with the Kenyon cells.
+    source: Waddell et al. 2000; Keene et al. 2006.
+
+  # ---- Outputs: descending and motor neurons ------------------------------------------
+
+  dna02:
+    select: {cell_type: DNa02}
+    split_by_side: true
+    expect: {min: 2, max: 2}
+    status: real
+    role: Descending neurons that steer walking toward their own side.
+    source: Rayshubskiy et al. 2020.
+
+  dnp09:
+    select: {cell_type: DNp09}
+    split_by_side: true
+    expect: {min: 2, max: 2}
+    status: real
+    role: Descending neurons that drive forward walking.
+    source: Bidaye et al. 2020.
+
+  mdn:
+    select: {cell_type: MDN}
+    expect: {min: 4, max: 4}
+    status: real
+    role: Moonwalker descending neurons, which drive backward walking.
+    source: Bidaye et al. 2014.
+
+  dnp01:
+    select: {cell_type: DNp01}
+    split_by_side: true
+    expect: {min: 2, max: 2}
+    status: real
+    role: The giant fiber, which triggers escape takeoff.
+    source: von Reyn et al. 2014.
+
+  mn9:
+    # MN9 is the name used by Shiu et al.; the annotations call this type CB0701.
+    select: {cell_type: CB0701, super_class: motor}
+    split_by_side: true
+    expect: {min: 2, max: 2}
+    anchor_root_ids: [720575940660219265]
+    status: real
+    role: Motor neuron 9, which extends the proboscis to feed.
+    source: Shiu et al. 2024.

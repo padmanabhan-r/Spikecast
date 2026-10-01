@@ -1,0 +1,646 @@
+/* The film's drawn sections. One frame is 1920 by 1080; sizes are in --u, 1/178 of the
+   frame's width, so a preview window and the render are the same picture. */
+
+#frame[data-layout="film"] {
+  aspect-ratio: 16 / 9;
+  width: min(100vw, 177.78vh);
+  --u: 0.5625cqw;
+}
+
+#frame[data-layout="film"] #brain {
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+#stage {
+  position: absolute;
+  inset: 0;
+  color: var(--ink);
+  font-size: calc(2.6 * var(--u));
+}
+
+#stage > *,
+#stage .flow > *,
+#stage .voice > * {
+  visibility: hidden;
+}
+
+.kicker {
+  font-weight: 500;
+  font-size: calc(2 * var(--u));
+  color: var(--ink-dim);
+}
+
+/* --- captions ---------------------------------------------------------------------------- */
+
+#frame[data-layout="film"] #band {
+  top: auto;
+  bottom: 5%;
+  left: 0;
+  right: 0;
+  height: 13%;
+  padding: 0 calc(16 * var(--u));
+}
+
+#frame[data-layout="film"] #caption {
+  font-size: calc(4.2 * var(--u));
+  line-height: 1.16;
+  max-width: 24em;
+  transition: none;
+  text-shadow: 0 0 calc(2 * var(--u)) var(--ground), 0 0 calc(0.6 * var(--u)) var(--ground);
+}
+
+#frame[data-layout="film"] #caption span {
+  transition: none;
+}
+
+/* Hero captions: the narration itself, large, in the middle of the frame. */
+#frame[data-layout="film"] #band[data-style="hero"] {
+  bottom: auto;
+  top: 60%;
+  height: 30%;
+  align-items: start;
+}
+
+#band[data-style="hero"] #caption {
+  font-size: calc(7.2 * var(--u));
+  line-height: 1.06;
+  letter-spacing: -0.02em;
+  max-width: 15em;
+}
+
+#band[data-style="hero"][data-tone="ask"] #caption {
+  font-size: calc(12 * var(--u));
+}
+
+#frame[data-section="title"] #band[data-style="hero"] {
+  top: 84%;
+  height: 12%;
+}
+
+#frame[data-section="title"] #caption {
+  font-size: calc(4.6 * var(--u));
+  color: var(--ink);
+}
+
+/* --- title ------------------------------------------------------------------------------- */
+
+/* The title sits above the brain, the spoken line below it. */
+#frame[data-section="title"] #brain {
+  transform: translateY(7%);
+}
+
+.wordmark-hero {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 8%;
+  text-align: center;
+  font-weight: 500;
+  font-size: calc(17 * var(--u));
+  line-height: 1;
+  text-transform: uppercase;
+  /* the tracking is animated; the indent keeps the word optically centred */
+  text-indent: 0.22em;
+  text-shadow: 0 0 calc(5 * var(--u)) color-mix(in srgb, var(--neuron-rest) 55%, transparent);
+}
+
+.wordmark-sub {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 27%;
+  text-align: center;
+  font-size: calc(3.4 * var(--u));
+  font-style: italic;
+  color: var(--ink-dim);
+}
+
+/* --- concept ----------------------------------------------------------------------------- */
+
+.facts {
+  position: absolute;
+  left: 61%;
+  top: 22%;
+  display: grid;
+  gap: calc(3.4 * var(--u));
+}
+
+.fact b {
+  display: block;
+  font-weight: 500;
+  font-size: calc(11.5 * var(--u));
+  line-height: 0.98;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+}
+
+.fact span {
+  font-size: calc(3.2 * var(--u));
+  color: var(--ink-dim);
+}
+
+.fact-note {
+  font-size: calc(2.4 * var(--u));
+  font-style: italic;
+  color: var(--ink-dim);
+}
+
+.legend {
+  position: absolute;
+  left: 64%;
+  top: 40%;
+  max-width: 16em;
+  font-size: calc(3.4 * var(--u));
+  line-height: 1.25;
+}
+
+.legend i {
+  display: inline-block;
+  width: 0.5em;
+  height: 0.5em;
+  margin-right: 0.6em;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 0.8em 0.25em color-mix(in srgb, var(--neuron-rest) 80%, transparent);
+  vertical-align: middle;
+}
+
+/* --- shared: big lines and panels ---------------------------------------------------------- */
+
+.big {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 38%;
+  text-align: center;
+  font-weight: 500;
+  font-size: calc(10 * var(--u));
+  line-height: 1.04;
+  letter-spacing: -0.025em;
+}
+
+.big.small {
+  top: 12%;
+  font-size: calc(5.4 * var(--u));
+}
+
+.big.punch {
+  top: 60%;
+  font-size: calc(7.4 * var(--u));
+}
+
+.big.punch em {
+  font-style: normal;
+  color: color-mix(in srgb, var(--ink) 35%, transparent);
+}
+
+.big.punch.lit em {
+  color: var(--odor-a);
+}
+
+.panel {
+  position: absolute;
+  display: grid;
+  gap: calc(1.3 * var(--u));
+  padding: calc(3 * var(--u)) calc(3.4 * var(--u));
+  border-radius: calc(2 * var(--u));
+  background: color-mix(in srgb, var(--ground) 80%, transparent);
+  outline: 1px solid color-mix(in srgb, var(--ink) 16%, transparent);
+}
+
+.panel h3 {
+  font-weight: 500;
+  font-size: calc(4.6 * var(--u));
+  line-height: 1.08;
+  letter-spacing: -0.015em;
+  margin-bottom: calc(1 * var(--u));
+}
+
+.panel .row {
+  display: flex;
+  justify-content: space-between;
+  gap: 2em;
+  padding-bottom: calc(0.9 * var(--u));
+  border-bottom: 1px solid color-mix(in srgb, var(--ink) 10%, transparent);
+  color: var(--ink-dim);
+}
+
+.panel .row b {
+  font-weight: 500;
+  color: var(--ink);
+  text-align: right;
+}
+
+.panel .row.means.lit,
+.panel .row.means.aversive {
+  color: var(--ink);
+}
+
+.panel .row.means.lit b,
+.panel .row.means.aversive b {
+  color: var(--odor-a);
+}
+
+.panel .row.means.lit {
+  border-bottom-color: var(--odor-a);
+}
+
+/* --- jev -----------------------------------------------------------------------------------
+   Everything written sits in the left three fifths; the brain waits on the right. */
+
+#frame[data-section="jev"] .big {
+  left: calc(8 * var(--u));
+  right: 40%;
+  text-align: left;
+}
+
+#frame[data-section="jev"] .big.punch {
+  top: 63%;
+}
+
+#frame[data-section="jev"] .panel {
+  font-size: calc(3.1 * var(--u));
+}
+
+#frame[data-section="jev"] .panel .kicker {
+  font-size: calc(2.4 * var(--u));
+}
+
+.jev-name {
+  position: absolute;
+  left: calc(8 * var(--u));
+  top: calc(6 * var(--u));
+  display: grid;
+  gap: 0.25em;
+}
+
+.jev-name b {
+  font-weight: 500;
+  font-size: calc(9.6 * var(--u));
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+}
+
+.jev-name span {
+  font-size: calc(3.4 * var(--u));
+  color: var(--ink-dim);
+}
+
+.jev-name em {
+  font-size: calc(2.6 * var(--u));
+  color: var(--ink-dim);
+}
+
+.panel.ask {
+  left: calc(8 * var(--u));
+  top: 36%;
+  width: calc(92 * var(--u));
+}
+
+.bar {
+  display: grid;
+  grid-template-columns: 8.4em 1fr 3.2em;
+  align-items: center;
+  gap: 1em;
+  color: color-mix(in srgb, var(--ink-dim) 80%, transparent);
+}
+
+.bar i {
+  display: block;
+  height: 0.5em;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--ink) 10%, transparent);
+}
+
+.bar b {
+  display: block;
+  height: 100%;
+  width: 0;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--ink) 45%, transparent);
+}
+
+.bar em {
+  font-style: normal;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.bar.chosen {
+  color: var(--ink);
+}
+
+.bar.chosen b {
+  background: var(--ink);
+}
+
+.panel.never {
+  left: calc(8 * var(--u));
+  top: 36%;
+  width: calc(44 * var(--u));
+}
+
+.strike {
+  color: var(--ink-dim);
+}
+
+.strike s {
+  text-decoration-color: var(--punish);
+  text-decoration-thickness: 0.09em;
+}
+
+#frame[data-section="jev"] .panel.told {
+  left: calc(56 * var(--u));
+  top: 25%;
+  width: calc(58 * var(--u));
+  gap: calc(0.55 * var(--u));
+  padding: calc(2.2 * var(--u)) calc(3 * var(--u));
+  font-size: calc(2.45 * var(--u));
+}
+
+#frame[data-section="jev"] .panel.told .row {
+  padding-bottom: calc(0.5 * var(--u));
+}
+
+.chips {
+  position: absolute;
+  left: calc(8 * var(--u));
+  top: 66%;
+  display: grid;
+  gap: calc(1.4 * var(--u));
+  justify-items: start;
+}
+
+.chip {
+  padding: 0.3em 1em;
+  border-radius: 999px;
+  font-weight: 500;
+  font-size: calc(3.2 * var(--u));
+  color: color-mix(in srgb, var(--ink) 35%, transparent);
+  outline: 1px solid color-mix(in srgb, var(--ink) 18%, transparent);
+}
+
+.chip.lit {
+  color: var(--ground);
+  background: var(--ink);
+  outline-color: var(--ink);
+}
+
+.chip.aversive.lit {
+  background: var(--odor-a);
+  outline-color: var(--odor-a);
+}
+
+.chip.attractive.lit {
+  background: var(--odor-b);
+  outline-color: var(--odor-b);
+}
+
+.pair {
+  position: absolute;
+  left: calc(8 * var(--u));
+  width: calc(100 * var(--u));
+  top: 12%;
+  display: grid;
+  gap: calc(3 * var(--u));
+  visibility: visible !important;
+}
+
+.pair .panel {
+  position: static;
+}
+
+.pair .panel .kicker {
+  color: var(--ink);
+}
+
+/* --- how it fits together ---------------------------------------------------------------- */
+
+.flow {
+  position: absolute;
+  left: calc(7 * var(--u));
+  right: calc(7 * var(--u));
+  top: 22%;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: calc(6.5 * var(--u)) calc(5 * var(--u));
+  visibility: visible !important;
+  transform-origin: 50% 0;
+}
+
+.node {
+  position: relative;
+  display: grid;
+  gap: 0.3em;
+  padding: calc(2.4 * var(--u)) calc(2.6 * var(--u));
+  border-radius: calc(1.8 * var(--u));
+  background: color-mix(in srgb, var(--ground) 82%, transparent);
+  outline: 1px solid color-mix(in srgb, var(--ink) 18%, transparent);
+}
+
+.node b {
+  font-weight: 500;
+  font-size: calc(3.7 * var(--u));
+  line-height: 1.1;
+}
+
+.node span {
+  font-size: calc(2.5 * var(--u));
+  line-height: 1.25;
+  color: var(--ink-dim);
+}
+
+.node.lit {
+  outline: 2px solid var(--ink);
+  background: color-mix(in srgb, var(--ink) 9%, var(--ground));
+}
+
+.node.n-jev b {
+  color: var(--odor-b);
+}
+
+.node.n-jev.lit {
+  outline-color: var(--odor-b);
+}
+
+/* arrows between the nodes: the top row runs left to right, the bottom row right to left */
+.flow .node::after {
+  content: "→";
+  position: absolute;
+  right: calc(-4 * var(--u));
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: calc(3 * var(--u));
+  color: var(--ink-dim);
+}
+
+.flow .n-memory::after {
+  content: "↓";
+  right: 50%;
+  top: auto;
+  bottom: calc(-5.4 * var(--u));
+  transform: translateX(50%);
+}
+
+.flow .n-jev {
+  grid-column: 4;
+  grid-row: 2;
+}
+
+.flow .n-command {
+  grid-column: 3;
+  grid-row: 2;
+}
+
+.flow .n-body {
+  grid-column: 2;
+  grid-row: 2;
+}
+
+.flow .n-jev::after,
+.flow .n-command::after {
+  content: "←";
+  right: auto;
+  left: calc(-4 * var(--u));
+}
+
+.flow .n-body::after {
+  content: "←";
+  right: auto;
+  left: calc(-4 * var(--u));
+}
+
+.flow .loop {
+  grid-column: 1;
+  grid-row: 2;
+  align-self: center;
+  font-size: calc(2.5 * var(--u));
+  font-style: italic;
+  line-height: 1.3;
+  color: var(--ink-dim);
+}
+
+.flow .loop::before {
+  content: "↑ ";
+  font-style: normal;
+}
+
+.voice {
+  position: absolute;
+  left: calc(18 * var(--u));
+  right: calc(18 * var(--u));
+  top: 62%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: calc(5 * var(--u));
+  visibility: visible !important;
+}
+
+.voice .node.v:not(:last-child)::after {
+  content: "→";
+  position: absolute;
+  right: calc(-4 * var(--u));
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: calc(3 * var(--u));
+  color: var(--ink-dim);
+}
+
+/* --- the close -----------------------------------------------------------------------------
+   Type in the upper half, the brain in the lower. */
+
+#frame[data-section="close"] #brain {
+  transform: translateY(17%);
+}
+
+.ledger {
+  position: absolute;
+  left: calc(26 * var(--u));
+  right: calc(26 * var(--u));
+  top: 10%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: calc(8 * var(--u));
+}
+
+.side {
+  display: grid;
+  gap: calc(1.4 * var(--u));
+  align-content: start;
+  font-size: calc(3.6 * var(--u));
+  line-height: 1.2;
+  visibility: visible !important;
+}
+
+.side .kicker {
+  font-size: calc(2.6 * var(--u));
+  padding-bottom: calc(1.2 * var(--u));
+  border-bottom: 1px solid color-mix(in srgb, var(--ink) 30%, transparent);
+  color: var(--neuron-rest);
+}
+
+.side.mine .kicker {
+  color: var(--odor-b);
+}
+
+.line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-weight: 500;
+  font-size: calc(6.4 * var(--u));
+  letter-spacing: -0.02em;
+}
+
+.line:nth-of-type(1) {
+  top: 9%;
+}
+.line:nth-of-type(2) {
+  top: 20%;
+}
+.line:nth-of-type(3) {
+  top: 31%;
+}
+
+.endcard {
+  position: absolute;
+  inset: 7% 0 auto 0;
+  display: grid;
+  justify-items: center;
+  gap: calc(2.2 * var(--u));
+  text-align: center;
+}
+
+.endcard h1 {
+  font-weight: 500;
+  font-size: calc(15 * var(--u));
+  line-height: 1;
+  letter-spacing: 0.2em;
+  text-indent: 0.2em;
+  text-transform: uppercase;
+  text-shadow: 0 0 calc(5 * var(--u)) color-mix(in srgb, var(--neuron-rest) 55%, transparent);
+}
+
+.endcard .repo {
+  font-size: calc(4 * var(--u));
+  color: var(--ink);
+}
+
+.endcard .credits {
+  font-size: calc(3 * var(--u));
+  color: var(--ink-dim);
+}
+
+.endcard .cite {
+  font-size: calc(1.9 * var(--u));
+  color: color-mix(in srgb, var(--ink-dim) 75%, transparent);
+}
+
+.endcard .credits i {
+  font-style: normal;
+  margin: 0 0.6em;
+  color: color-mix(in srgb, var(--ink-dim) 50%, transparent);
+}

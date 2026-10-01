@@ -1,0 +1,1328 @@
+@import "@fontsource/hanken-grotesk/400.css";
+@import "@fontsource/hanken-grotesk/400-italic.css";
+@import "@fontsource/hanken-grotesk/500.css";
+@import "./tokens.css";
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+html,
+body {
+  height: 100%;
+  background: #000;
+  color: var(--ink);
+  font-family: var(--font);
+  overflow: hidden;
+}
+
+::selection {
+  background: var(--neuron-rest);
+  color: var(--ground);
+}
+
+/* The frame keeps its aspect and fills as much of the window as it can. Everything inside is
+   sized in container units, so the 1080-wide film and a small preview are the same picture. */
+#frame {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  background: #020409; /* the ground colour as the lens renders it at the panel edges */
+  container-type: size;
+  overflow: hidden;
+  --u: 1cqw; /* 1% of the frame's width */
+}
+
+#frame[data-layout="4x5"] {
+  aspect-ratio: 4 / 5;
+  height: min(100vh, 125vw);
+}
+
+#frame[data-layout="9x16"] {
+  aspect-ratio: 9 / 16;
+  height: min(100vh, 177.78vw);
+}
+
+#frame[data-layout="16x9"] {
+  aspect-ratio: 16 / 9;
+  width: min(100vw, 177.78vh);
+}
+
+/* Road: the fly on its road, what Jev just decided, and the brain beside it. */
+#frame[data-layout="road"] {
+  aspect-ratio: 16 / 9;
+  width: min(100vw, 177.78vh);
+  --u: 0.5625cqw;
+}
+
+#frame[data-layout="road"] #arena {
+  inset: 0 auto 0 0;
+  width: 62%;
+  height: 100%;
+  mask-image: linear-gradient(to right, #000 82%, transparent);
+}
+
+#frame[data-layout="road"] #brain {
+  inset: 10% 0 22% auto;
+  width: 42%;
+  height: 68%;
+  mask-image: radial-gradient(ellipse 72% 76% at 50% 50%, #000 58%, transparent);
+}
+
+#frame[data-layout="road"] #band {
+  top: auto;
+  bottom: 2.5%;
+  left: 24%;
+  height: 12%;
+  padding: 0 calc(4 * var(--u));
+}
+
+#frame[data-layout="road"] #caption {
+  font-size: calc(3.7 * var(--u));
+  max-width: 28em;
+}
+
+/* On the road the caption at the top is the script's own line, so the spoken line is not
+   written out a second time underneath. */
+#frame[data-layout="road"] :is(#scale, #scene, #region, #odor, #diagnostics, #story, #wordmark, #band) {
+  display: none;
+}
+
+#frame:not([data-layout="road"]) :is(#hud, #beat) {
+  display: none;
+}
+
+#frame[data-layout="road"] #modelled {
+  font-size: calc(1.7 * var(--u));
+}
+
+#frame[data-layout="road"] #help {
+  left: calc(3.6 * var(--u));
+  bottom: calc(3 * var(--u));
+  max-width: calc(46 * var(--u));
+  font-size: calc(1.6 * var(--u));
+}
+
+#frame[data-layout="road"] #modelled {
+  left: auto !important;
+  right: calc(4 * var(--u)) !important;
+  top: auto !important;
+  bottom: calc(3 * var(--u));
+}
+
+#hud {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  font-size: calc(1.9 * var(--u));
+  color: var(--ink-dim);
+}
+
+#hud-wire {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+#hud-link {
+  stroke: color-mix(in srgb, var(--neuron-rest) 55%, transparent);
+  stroke-width: 1;
+  stroke-dasharray: 2 5;
+}
+
+#hud-card {
+  position: absolute;
+  left: calc(3.6 * var(--u));
+  top: calc(3.6 * var(--u));
+  width: calc(42 * var(--u));
+  display: grid;
+  gap: calc(0.9 * var(--u));
+  padding: calc(2.4 * var(--u));
+  border-radius: calc(1.8 * var(--u));
+  background: color-mix(in srgb, var(--ground) 78%, transparent);
+  outline: 1px solid color-mix(in srgb, var(--ink) 14%, transparent);
+  backdrop-filter: blur(10px);
+}
+
+#hud .kicker {
+  font-size: calc(1.5 * var(--u));
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  color: var(--ink-dim);
+}
+
+#hud .kicker:not(:first-child) {
+  margin-top: calc(1.2 * var(--u));
+  padding-top: calc(1.6 * var(--u));
+  border-top: 1px solid color-mix(in srgb, var(--ink) 12%, transparent);
+}
+
+#hud-action {
+  font-weight: 500;
+  font-size: calc(5.6 * var(--u));
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+#hud-action.hit {
+  animation: hud-hit 450ms var(--ease-out);
+}
+
+@keyframes hud-hit {
+  from {
+    opacity: 0.3;
+    transform: translateY(0.18em);
+  }
+}
+
+#hud-action[data-action="walk_backward"] {
+  color: var(--punish);
+}
+#hud-action[data-action="feed"] {
+  color: var(--reward);
+}
+#hud-action[data-action="takeoff"] {
+  color: var(--escape);
+}
+
+#hud-neuron {
+  font-style: italic;
+  min-height: 1.3em;
+}
+
+#hud-bars {
+  display: grid;
+  gap: calc(0.45 * var(--u));
+  margin-top: calc(0.6 * var(--u));
+  font-size: calc(1.55 * var(--u));
+}
+
+#hud-bars .bar {
+  display: grid;
+  grid-template-columns: 7.2em 1fr;
+  align-items: center;
+  gap: 0.8em;
+  color: color-mix(in srgb, var(--ink-dim) 75%, transparent);
+}
+
+#hud-bars .bar.chosen {
+  color: var(--ink);
+}
+
+#hud-bars i {
+  display: block;
+  height: 0.42em;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--ink) 10%, transparent);
+}
+
+#hud-bars b {
+  display: block;
+  width: 0;
+  height: 100%;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--ink) 45%, transparent);
+  transition: width 220ms var(--ease-out);
+}
+
+#hud-bars .chosen b {
+  background: var(--ink);
+}
+
+.mem {
+  display: grid;
+  gap: calc(0.7 * var(--u));
+}
+
+.mem > div:first-child {
+  display: flex;
+  justify-content: space-between;
+  color: var(--ink);
+}
+
+.mem .dot {
+  display: inline-block;
+  width: 0.62em;
+  height: 0.62em;
+  margin-right: 0.6em;
+  border-radius: 50%;
+  background: var(--odor-a);
+}
+
+.mem .dot.honey {
+  background: var(--odor-b);
+}
+
+.mem span[data-tone="aversive"] {
+  color: var(--odor-a);
+}
+
+.mem span[data-tone="attractive"] {
+  color: var(--odor-b);
+}
+
+.mem .track {
+  position: relative;
+  height: 0.3em;
+  border-radius: 999px;
+  background: linear-gradient(to right, color-mix(in srgb, var(--odor-a) 55%, transparent), color-mix(in srgb, var(--ink) 14%, transparent) 50%, color-mix(in srgb, var(--odor-b) 55%, transparent));
+}
+
+.mem .mid {
+  position: absolute;
+  left: 50%;
+  top: -0.25em;
+  width: 1px;
+  height: 0.8em;
+  background: color-mix(in srgb, var(--ink) 40%, transparent);
+}
+
+.mem .knob {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 1em;
+  height: 1em;
+  margin: -0.5em 0 0 -0.5em;
+  border-radius: 50%;
+  background: var(--ink);
+  box-shadow: 0 0 0 0.22em var(--ground);
+  transition: left 900ms var(--ease-in-out);
+}
+
+#hud-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: calc(1 * var(--u));
+  margin-top: calc(1.2 * var(--u));
+  padding-top: calc(1.6 * var(--u));
+  border-top: 1px solid color-mix(in srgb, var(--ink) 12%, transparent);
+}
+
+#hud-stats dd {
+  margin: 0;
+  font-weight: 500;
+  font-size: calc(2.6 * var(--u));
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+#hud-stats dd[data-on="1"] {
+  color: var(--punish);
+}
+
+#hud-stats dt {
+  font-size: calc(1.4 * var(--u));
+}
+
+#hud-brain-note {
+  position: absolute;
+  right: calc(4 * var(--u));
+  top: calc(3.6 * var(--u));
+  width: 30%;
+  text-align: right;
+  font-size: calc(1.7 * var(--u));
+  line-height: 1.35;
+}
+
+/* The script's caption: one plain line, top centre, as in a nature film's lower third. */
+#beat {
+  position: absolute;
+  left: 44%;
+  top: calc(3.6 * var(--u));
+  transform: translateX(-50%);
+  max-width: 30%;
+  padding: calc(1.3 * var(--u)) calc(2.4 * var(--u));
+  border-radius: calc(1.8 * var(--u));
+  background: color-mix(in srgb, var(--ink) 92%, transparent);
+  color: var(--ground);
+  font-weight: 500;
+  font-size: calc(2.2 * var(--u));
+  line-height: 1.25;
+  text-align: center;
+  text-wrap: balance;
+}
+
+#beat:empty {
+  display: none;
+}
+
+#beat.in {
+  animation: beat-in 500ms var(--ease-out);
+}
+
+@keyframes beat-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -0.5em);
+  }
+}
+
+#frame[data-layout="road"] #brain {
+  inset: 12% 0 20% auto;
+}
+
+#beat em {
+  font-style: normal;
+  color: color-mix(in srgb, var(--ground) 55%, var(--punish));
+}
+
+#frame[data-chrome="off"] #hud-brain-note {
+  display: none;
+}
+
+/* The film's road section: the narration is the caption, so the script's own line is off. */
+#frame[data-film] #beat {
+  display: none;
+}
+
+/* In the film the readout is read on a phone: a size up. */
+#frame[data-film] #hud-card {
+  transform: scale(1.22);
+  transform-origin: top left;
+}
+
+#frame[data-film][data-layout="road"] #band {
+  display: grid;
+  z-index: 2; /* above the road's canvas, which comes later in the page */
+  left: 0;
+  bottom: 5%;
+  height: 13%;
+  padding: 0 calc(16 * var(--u));
+}
+
+#frame[data-film][data-layout="road"] #caption {
+  font-size: calc(4.2 * var(--u));
+  line-height: 1.16;
+  max-width: 24em;
+  transition: none;
+  text-shadow: 0 0 calc(2 * var(--u)) var(--ground), 0 0 calc(0.6 * var(--u)) var(--ground);
+}
+
+#frame[data-film] #caption span {
+  transition: none;
+}
+
+/* Story: the layout a first-time viewer meets. The world on the left, the fly's brain on the
+   right, a question above and the commentary below. */
+#frame[data-layout="story"] {
+  aspect-ratio: 16 / 9;
+  width: min(100vw, 177.78vh);
+  --u: 0.5625cqw;
+}
+
+#frame[data-layout="story"] #arena {
+  inset: 15% auto 15% 0;
+  width: 56%;
+  height: 70%;
+  mask-image: radial-gradient(ellipse 76% 80% at 50% 50%, #000 62%, transparent);
+}
+
+#frame[data-layout="story"] #brain {
+  inset: 15% 0 27% auto;
+  width: 44%;
+  height: 58%;
+  mask-image: radial-gradient(ellipse 72% 76% at 50% 50%, #000 58%, transparent);
+}
+
+#frame[data-layout="story"] #band {
+  top: auto;
+  bottom: 2.5%;
+  height: 12.5%;
+  padding: 0 calc(8 * var(--u));
+}
+
+#frame[data-layout="story"] #caption {
+  font-size: calc(4.1 * var(--u));
+  max-width: 26em;
+}
+
+#frame[data-layout="story"] :is(#scale, #scene, #region, #odor, #diagnostics) {
+  display: none;
+}
+
+#frame[data-layout="story"] #help {
+  bottom: auto;
+  top: calc(3 * var(--u));
+  left: auto;
+  right: calc(4.4 * var(--u));
+  max-width: none;
+  font-size: calc(1.6 * var(--u));
+}
+
+#frame[data-layout="story"] #modelled {
+  font-size: calc(1.8 * var(--u));
+}
+
+#story {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  font-size: calc(2.2 * var(--u));
+}
+
+#frame:not([data-layout="story"]) #story,
+#frame:not([data-layout="story"]) #verdict {
+  display: none;
+}
+
+#story-steps {
+  position: absolute;
+  top: calc(3.2 * var(--u));
+  left: calc(22 * var(--u));
+  display: flex;
+  gap: calc(2.6 * var(--u));
+  list-style: none;
+  padding: 0;
+  color: color-mix(in srgb, var(--ink-dim) 70%, transparent);
+  font-size: calc(2.1 * var(--u));
+}
+
+#story-steps li {
+  display: flex;
+  align-items: center;
+  gap: 0.55em;
+  transition: color 400ms var(--ease-out);
+}
+
+#story-steps b {
+  display: grid;
+  place-items: center;
+  width: 1.7em;
+  height: 1.7em;
+  border-radius: 50%;
+  font-weight: 500;
+  font-size: 0.82em;
+  border: 1px solid currentColor;
+  transition: background 400ms var(--ease-out), color 400ms var(--ease-out);
+}
+
+#story-steps li.done {
+  color: var(--ink-dim);
+}
+
+#story-steps li.on {
+  color: var(--ink);
+}
+
+#story-steps li.on b {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--ground);
+}
+
+#story-question {
+  position: absolute;
+  top: calc(8.4 * var(--u));
+  left: calc(4.4 * var(--u));
+  right: calc(4.4 * var(--u));
+  font-weight: 500;
+  font-size: calc(4.4 * var(--u));
+  line-height: 1.1;
+  letter-spacing: -0.018em;
+  color: var(--ink);
+}
+
+#story-question.in {
+  animation: question-in 700ms var(--ease-out) both;
+}
+
+@keyframes question-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.35em);
+  }
+}
+
+#story-wire {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+#story-link {
+  stroke: color-mix(in srgb, var(--neuron-rest) 55%, transparent);
+  stroke-width: 1;
+  stroke-dasharray: 2 5;
+}
+
+.arm {
+  position: absolute;
+  transform: translate(-50%, -100%);
+  display: grid;
+  justify-items: center;
+  gap: 0.1em;
+  white-space: nowrap;
+  color: var(--ink-dim);
+  transition: color 300ms var(--ease-out);
+}
+
+.arm[data-odor="A"] .arm-name {
+  color: var(--odor-a);
+}
+
+.arm[data-odor="B"] .arm-name {
+  color: var(--odor-b);
+}
+
+.arm-name {
+  font-weight: 500;
+}
+
+.arm-clock {
+  font-weight: 500;
+  font-size: calc(4.6 * var(--u));
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  color: color-mix(in srgb, var(--ink) 55%, transparent);
+  transition: color 300ms var(--ease-out);
+}
+
+.arm.here .arm-clock {
+  color: var(--ink);
+}
+
+#story-now {
+  position: absolute;
+  left: calc(4.4 * var(--u));
+  bottom: 17.5%;
+  font-weight: 500;
+  font-size: calc(2.9 * var(--u));
+  color: var(--ink);
+}
+
+#story-now::before {
+  content: "Now  ";
+  white-space: pre;
+  font-weight: 400;
+  font-size: 0.75em;
+  color: var(--ink-dim);
+}
+
+#story-now[data-tone="punish"] {
+  color: var(--punish);
+}
+
+#story-now[data-tone="turn"] {
+  color: var(--odor-a);
+}
+
+.leader {
+  stroke: color-mix(in srgb, var(--ink) 60%, transparent);
+  stroke-width: 1;
+}
+
+.part {
+  --level: 0;
+  position: absolute;
+  transform: translate(0.9em, -50%);
+  white-space: nowrap;
+  font-size: calc(1.9 * var(--u));
+  font-style: italic;
+  color: color-mix(in srgb, var(--ink) calc(42% + 58% * var(--level)), transparent);
+  text-shadow: 0 0 0.6em var(--ground), 0 0 0.3em var(--ground);
+}
+
+.part::before {
+  content: "";
+  position: absolute;
+  left: -0.9em;
+  top: 50%;
+  width: 0.42em;
+  height: 0.42em;
+  margin-top: -0.21em;
+  border-radius: 50%;
+  background: var(--tone, var(--ink));
+  opacity: calc(0.35 + 0.65 * var(--level));
+  transform: scale(calc(1 + 1.2 * var(--level)));
+}
+
+.part[data-side="left"] {
+  transform: translate(calc(-100% - 0.9em), -50%);
+}
+
+.part[data-side="left"]::before {
+  left: auto;
+  right: -0.9em;
+}
+
+/* The pilot, on the line between the brain and the fly. */
+#jev {
+  position: absolute;
+  left: 42%;
+  top: 64%;
+  transform: translate(-50%, -50%);
+  width: calc(46 * var(--u));
+  display: grid;
+  gap: 0.35em;
+  padding: calc(1.6 * var(--u)) calc(2 * var(--u));
+  border-radius: calc(1.4 * var(--u));
+  background: color-mix(in srgb, var(--ground) 82%, transparent);
+  outline: 1px solid color-mix(in srgb, var(--ink) 16%, transparent);
+  backdrop-filter: blur(6px);
+  font-size: calc(1.75 * var(--u));
+  color: var(--ink-dim);
+  opacity: 0.55;
+  transition: opacity 500ms var(--ease-out), outline-color 500ms var(--ease-out);
+}
+
+#jev.on {
+  opacity: 1;
+  outline-color: color-mix(in srgb, var(--ink) 40%, transparent);
+}
+
+#jev.hit {
+  animation: jev-hit 500ms var(--ease-out);
+}
+
+@keyframes jev-hit {
+  from {
+    transform: translate(-50%, -50%) scale(1.06);
+  }
+}
+
+#jev-label b {
+  font-weight: 500;
+  color: var(--ink);
+}
+
+#jev-choice {
+  font-weight: 500;
+  font-size: calc(3.6 * var(--u));
+  line-height: 1.05;
+  color: var(--ink);
+}
+
+#jev[data-choice="turn"] #jev-choice {
+  color: var(--odor-a);
+}
+
+#jev i {
+  position: relative;
+  display: block;
+  height: 0.5em;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--ink) 12%, transparent);
+}
+
+#jev-fill {
+  display: block;
+  width: 0;
+  height: 100%;
+  border-radius: 999px;
+  background: var(--ink);
+  transition: width 300ms var(--ease-out);
+}
+
+#jev[data-choice="turn"] #jev-fill {
+  background: var(--odor-a);
+}
+
+#jev-fill::after {
+  content: attr(data-pct);
+  position: absolute;
+  right: 0;
+  top: -1.7em;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+}
+
+.part[data-tone="punish"] {
+  --tone: var(--punish);
+}
+.part[data-tone="odor-a"] {
+  --tone: var(--odor-a);
+}
+.part[data-tone="rest"] {
+  --tone: var(--neuron-rest);
+}
+.part[data-tone="escape"] {
+  --tone: var(--escape);
+}
+.part[data-tone="reward"] {
+  --tone: var(--reward);
+}
+
+#story-brain-note {
+  position: absolute;
+  right: calc(4.4 * var(--u));
+  top: 15.5%;
+  width: 36%;
+  text-align: right;
+  font-size: calc(1.75 * var(--u));
+  line-height: 1.35;
+  color: var(--ink-dim);
+}
+
+#memory {
+  position: absolute;
+  right: calc(4.4 * var(--u));
+  bottom: 17%;
+  width: 36%;
+  display: grid;
+  gap: 0.5em;
+  font-size: calc(1.8 * var(--u));
+  color: var(--ink-dim);
+}
+
+#memory i {
+  display: block;
+  height: 0.55em;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--ink) 12%, transparent);
+  overflow: hidden;
+}
+
+#memory b {
+  display: block;
+  width: 0;
+  height: 100%;
+  border-radius: 999px;
+  background: var(--odor-a);
+  transition: width 900ms var(--ease-in-out);
+}
+
+#memory strong {
+  font-weight: 500;
+  color: var(--ink);
+}
+
+#memory-value {
+  font-variant-numeric: tabular-nums;
+}
+
+/* The twin: the same test with learning switched off, small, beside the real one. */
+#twin {
+  left: calc(3 * var(--u));
+  top: 47%;
+  width: 20%;
+  height: 25%;
+  border-radius: calc(1.2 * var(--u));
+  outline: 1px solid color-mix(in srgb, var(--ink) 14%, transparent);
+}
+
+#twin-note {
+  position: absolute;
+  left: calc(3 * var(--u));
+  top: 72.6%;
+  width: 20%;
+  font-size: calc(1.6 * var(--u));
+  line-height: 1.3;
+  color: var(--ink-dim);
+}
+
+/* Jev's verdict on the line being spoken. */
+#verdict {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0.9%;
+  text-align: center;
+  font-size: calc(1.7 * var(--u));
+  color: var(--ink-dim);
+  opacity: 0;
+  transition: opacity 300ms var(--ease-out);
+}
+
+#verdict.on {
+  opacity: 1;
+}
+
+#verdict b {
+  font-weight: 500;
+  color: var(--ink);
+}
+
+#verdict s {
+  color: color-mix(in srgb, var(--punish) 85%, var(--ink));
+  margin-right: 0.8em;
+}
+
+#frame[data-chrome="off"] :is(#story-brain-note, #twin-note) {
+  display: none;
+}
+
+/* Home: the frame is the whole window, the brain fills it, the words sit on the left. */
+#frame[data-layout="home"] {
+  width: 100%;
+  height: 100%;
+  --u: min(1cqw, 1.5cqh);
+}
+
+#frame[data-layout="home"] #brain {
+  /* The brain has the right of the window to itself and fades out toward the text. */
+  inset: 0 0 0 auto;
+  width: 60%;
+  height: 100%;
+  mask-image: linear-gradient(to right, transparent, #000 22%);
+}
+
+@media (max-width: 900px) {
+  #frame[data-layout="home"] #brain {
+    width: 100%;
+    opacity: 0.35;
+    mask-image: none;
+  }
+}
+
+#frame[data-layout="home"] :is(#arena, #band, #scale, #help, #wordmark, .label) {
+  display: none;
+}
+
+#home {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: min(100%, 46rem);
+  padding: clamp(1.5rem, 6vw, 5rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1.4rem;
+}
+
+#home .kicker {
+  font-weight: 500;
+  color: var(--ink-dim);
+}
+
+#home h1 {
+  font-weight: 500;
+  font-size: clamp(2rem, 4.4vw, 3.6rem);
+  line-height: 1.04;
+  letter-spacing: -0.025em;
+  text-wrap: balance;
+}
+
+#home .lede {
+  font-size: clamp(1rem, 1.5vw, 1.2rem);
+  line-height: 1.5;
+  color: var(--ink-dim);
+  max-width: 34em;
+}
+
+#home ul {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: 1.1rem;
+  margin-top: 0.6rem;
+}
+
+#home li a {
+  font-weight: 500;
+  font-size: clamp(1.15rem, 1.9vw, 1.5rem);
+  color: var(--ink);
+  text-decoration: none;
+  border-bottom: 1px solid color-mix(in srgb, var(--neuron-rest) 60%, transparent);
+  padding-bottom: 0.1em;
+  transition: border-color 200ms var(--ease-out), color 200ms var(--ease-out);
+}
+
+#home li a::after {
+  content: " \2192";
+  color: var(--neuron-rest);
+}
+
+#home li a:hover,
+#home li a:focus-visible {
+  color: #fff;
+  border-color: var(--neuron-rest);
+  outline: none;
+}
+
+#home li p {
+  margin-top: 0.45rem;
+  color: var(--ink-dim);
+  line-height: 1.45;
+  max-width: 36em;
+}
+
+#home .fine {
+  font-size: 0.85rem;
+  font-style: italic;
+  color: color-mix(in srgb, var(--ink-dim) 80%, transparent);
+}
+
+canvas {
+  position: absolute;
+  display: block;
+}
+
+/* Stacked layouts: brain, caption band on the seam, arena. */
+#frame[data-layout="4x5"] #brain,
+#frame[data-layout="9x16"] #brain {
+  inset: 0 0 auto 0;
+  width: 100%;
+  height: var(--brain-h);
+  /* The panels dissolve into the caption band instead of ending at a line. */
+  mask-image: linear-gradient(to bottom, #000 82%, transparent);
+}
+
+#frame[data-layout="4x5"] #arena,
+#frame[data-layout="9x16"] #arena {
+  inset: auto 0 0 0;
+  width: 100%;
+  height: var(--arena-h);
+  mask-image: linear-gradient(to top, #000 84%, transparent);
+}
+
+#band {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: var(--brain-h);
+  height: var(--band-h);
+  display: grid;
+  place-items: center;
+  padding: 0 calc(4.4 * var(--u));
+  pointer-events: none;
+}
+
+/* Side by side for the live demo: brain left, arena right, captions under the brain. */
+#frame[data-layout="16x9"] #brain {
+  inset: 0 auto 0 0;
+  width: 56%;
+  height: 100%;
+}
+
+#frame[data-layout="16x9"] #arena {
+  inset: 0 0 auto auto;
+  width: 44%;
+  height: 58%;
+}
+
+#frame[data-layout="16x9"] #band {
+  top: auto;
+  bottom: 4%;
+  right: auto;
+  width: 56%;
+  height: 16%;
+}
+
+#frame[data-layout="16x9"] {
+  --u: 0.5625cqw; /* captions sized against a 1080-wide column, not the full 1920 */
+}
+
+#caption {
+  font-weight: var(--caption-weight);
+  font-size: calc(5.55 * var(--u));
+  line-height: var(--caption-leading);
+  letter-spacing: var(--caption-tracking);
+  text-align: center;
+  text-wrap: balance;
+  max-width: 17em;
+  opacity: 0;
+  transition: opacity 260ms var(--ease-out);
+}
+
+#caption.on {
+  opacity: 1;
+}
+
+/* Words arrive with the voice. A word not yet spoken is dim, never invisible, so the line
+   holds its shape while it fills in. */
+#caption span {
+  color: color-mix(in srgb, var(--ink) 34%, transparent);
+  transition: color 160ms var(--ease-out);
+}
+
+#caption span.said {
+  color: var(--ink);
+}
+
+#caption span.key.said[data-tone="punish"] {
+  color: var(--punish);
+}
+#caption span.key.said[data-tone="reward"] {
+  color: var(--reward);
+}
+#caption span.key.said[data-tone="odor-a"] {
+  color: var(--odor-a);
+}
+#caption span.key.said[data-tone="odor-b"] {
+  color: var(--odor-b);
+}
+#caption span.key.said[data-tone="escape"] {
+  color: var(--escape);
+}
+
+#wordmark {
+  position: absolute;
+  top: calc(3.6 * var(--u));
+  left: calc(4.4 * var(--u));
+  font-weight: 500;
+  font-size: calc(2.2 * var(--u));
+  color: var(--ink-dim);
+  text-decoration: none;
+}
+
+#wordmark:hover {
+  color: var(--ink);
+}
+
+#scene {
+  top: calc(3.6 * var(--u));
+  left: calc(17 * var(--u));
+  font-size: calc(2.2 * var(--u));
+  color: var(--ink-dim);
+}
+
+.label {
+  position: absolute;
+  font-style: italic;
+  font-size: calc(2.2 * var(--u));
+  color: var(--ink);
+  opacity: 0;
+  transition: opacity 400ms var(--ease-out);
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.label.on {
+  opacity: 0.92;
+}
+
+#odor[data-odor="A"] {
+  color: var(--odor-a);
+}
+#odor[data-odor="B"] {
+  color: var(--odor-b);
+}
+
+#modelled {
+  color: var(--ink-dim);
+  font-size: calc(1.7 * var(--u));
+}
+
+#scale {
+  position: absolute;
+  left: calc(4.4 * var(--u));
+  border-top: calc(0.28 * var(--u)) solid var(--ink);
+  padding-top: calc(0.7 * var(--u));
+  font-size: calc(1.85 * var(--u));
+  color: var(--ink-dim);
+}
+
+/* Title and end cards cover the frame. */
+#card {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: calc(2.2 * var(--u));
+  padding: calc(8 * var(--u));
+  text-align: center;
+  background: color-mix(in srgb, var(--ground) 86%, transparent);
+  opacity: 0;
+  transition: opacity 700ms var(--ease-out);
+}
+
+#card.on {
+  opacity: 1;
+}
+
+#card h1 {
+  font-weight: 500;
+  font-size: calc(7.4 * var(--u));
+  line-height: 1.06;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+#card-body {
+  font-size: calc(3.3 * var(--u));
+  color: var(--ink-dim);
+  max-width: 22em;
+  text-wrap: balance;
+}
+
+#card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: calc(1.4 * var(--u));
+  margin-top: calc(1.6 * var(--u));
+}
+
+#card-actions button {
+  font: inherit;
+  font-weight: 500;
+  font-size: calc(2.6 * var(--u));
+  color: var(--ground);
+  background: var(--ink);
+  border: 0;
+  border-radius: 999px;
+  padding: 0.5em 1.5em;
+  cursor: pointer;
+  transition: background 160ms var(--ease-out), transform 160ms var(--ease-out);
+}
+
+#card-actions button + button {
+  color: var(--ink);
+  background: color-mix(in srgb, var(--ink) 12%, transparent);
+}
+
+#card-actions button:hover,
+#card-actions button:focus-visible {
+  background: #fff;
+  outline: 2px solid color-mix(in srgb, var(--neuron-rest) 80%, transparent);
+  outline-offset: 3px;
+}
+
+#card-actions button + button:hover,
+#card-actions button + button:focus-visible {
+  background: color-mix(in srgb, var(--ink) 22%, transparent);
+}
+
+#card-actions button:active {
+  transform: scale(0.97);
+}
+
+#card-credits {
+  margin-top: calc(3 * var(--u));
+  font-size: calc(2.1 * var(--u));
+  color: var(--ink-dim);
+}
+
+/* Diagnostics: the live demo's instruments. Off in the film. */
+#diagnostics {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 44%;
+  height: 42%;
+  padding: calc(1.6 * var(--u)) calc(2.2 * var(--u));
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: calc(1.2 * var(--u));
+  font-size: calc(1.5 * var(--u));
+  color: var(--ink-dim);
+}
+
+#status {
+  order: -1;
+  line-height: 1.4;
+  max-width: 44em;
+}
+
+#raster {
+  position: static;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+}
+
+#meters {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: calc(0.8 * var(--u)) calc(2.4 * var(--u));
+}
+
+.meter {
+  display: grid;
+  grid-template-columns: 11em 1fr 3em;
+  align-items: center;
+  gap: 0.8em;
+  font-variant-numeric: tabular-nums;
+}
+
+.meter i {
+  display: block;
+  height: 0.45em;
+  background: color-mix(in srgb, var(--ink) 12%, transparent);
+}
+
+.meter i b {
+  display: block;
+  height: 100%;
+  background: var(--meter, var(--neuron-rest));
+  transition: width 900ms var(--ease-in-out);
+}
+
+#status {
+  font-style: italic;
+}
+
+#status:empty {
+  display: none;
+}
+
+#help {
+  position: absolute;
+  left: calc(4.4 * var(--u));
+  bottom: calc(3 * var(--u));
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5em 0.7em;
+  font-size: calc(1.5 * var(--u));
+  max-width: 52%;
+}
+
+#help button {
+  font: inherit;
+  color: var(--ink-dim);
+  background: color-mix(in srgb, var(--ink) 5%, transparent);
+  border: 1px solid color-mix(in srgb, var(--ink) 16%, transparent);
+  border-radius: 0.45em;
+  padding: 0.35em 0.75em 0.35em 0.45em;
+  cursor: pointer;
+  transition: color 160ms var(--ease-out), border-color 160ms var(--ease-out), background 160ms var(--ease-out);
+}
+
+#help button:hover,
+#help button:focus-visible {
+  color: var(--ink);
+  border-color: color-mix(in srgb, var(--neuron-rest) 70%, transparent);
+  background: color-mix(in srgb, var(--neuron-rest) 12%, transparent);
+  outline: none;
+}
+
+#help button:active {
+  background: color-mix(in srgb, var(--neuron-rest) 26%, transparent);
+}
+
+#mic[data-state="listening"] {
+  color: var(--ground);
+  background: var(--punish);
+  border-color: var(--punish);
+}
+
+#mic[data-state="thinking"] {
+  color: var(--ink);
+  border-color: var(--neuron-rest);
+}
+
+#help kbd {
+  font: inherit;
+  color: var(--ink);
+  margin-right: 0.55em;
+  padding: 0 0.3em;
+  border-radius: 0.25em;
+  background: color-mix(in srgb, var(--ink) 12%, transparent);
+}
+
+#frame[data-chrome="off"] #help,
+#frame[data-chrome="off"] #scene,
+#frame[data-chrome="off"] #wordmark,
+#frame[data-chrome="off"] #scale,
+#frame[data-chrome="off"] #diagnostics {
+  display: none;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #caption,
+  #caption span,
+  .label,
+  #card {
+    transition: none;
+  }
+}

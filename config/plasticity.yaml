@@ -1,0 +1,29 @@
+# Three-factor plasticity on Kenyon cell -> MBON synapses. Everything in this file is
+# MODELLED: the rule and every constant are ours, not measured. The wiring it acts on
+# (which Kenyon cell connects to which MBON, which dopamine neuron reaches which MBON) is real.
+#
+#   eligibility  e_k   rises by 1 for each spike of Kenyon cell k, decays with tau_eligibility
+#   dopamine     d_m   for MBON m: the firing rate of the dopamine neurons that synapse onto
+#                      it, weighted by their real synapse counts, low-pass filtered with
+#                      tau_dopamine; only the part above `dopamine_threshold_hz` counts,
+#                      in units of `dopamine_reference_hz`
+#   strength     s_km  starts at 1 (the connectome's weight), and each millisecond
+#                         s_km -= eta * e_k * d_m          (depression only)
+#                      clipped to [s_min, 1], recovering toward 1 with tau_recover
+#
+# Units: ms and Hz.
+
+# On the road one touch of toxic waste lasts well under a second, and one touch has to be
+# enough to change what the smell means, as it is for a real fly. eta is set for that.
+eta: 3.0e-5                 # depression per ms per unit eligibility per unit dopamine
+tau_eligibility: 1500.0     # how long a Kenyon cell's activity stays "tagged"
+tau_dopamine: 300.0         # smoothing of the dopamine signal
+dopamine_reference_hz: 100.0
+# Dopamine below this rate does not change synapses. It is 0 because the dopamine neurons now
+# fire only when the stimulus model drives them (config/model.yaml silences their inputs);
+# it is kept as a parameter for experiments that restore those inputs.
+dopamine_threshold_hz: 0.0
+s_min: 0.05                 # a synapse never weakens below 5% of its original strength
+tau_recover: 600000.0       # slow forgetting: 10 minutes
+min_dopamine_synapses: 50   # an MBON with fewer dopamine synapses than this is not plastic
+update_every_ms: 1.0

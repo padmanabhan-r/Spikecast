@@ -1,0 +1,65 @@
+# The road: a fly walks forward, and things are dropped in its path. Each beat drops one
+# thing ahead of the fly (or nothing), then waits for something to happen. `caption` is shown;
+# `say`, where given, is the shorter line spoken in its place so the voice keeps up. The script never
+# tells the fly what to do.
+name: road
+kind: road
+title: A fly on a road
+frame_hz: 60
+max_s: 130
+beats:
+  - step: Naive
+    caption: A fly with a real fly's brain, running as a simulation. It walks forward.
+    say: A fly with a simulated brain.
+    wait_s: 3.5
+  - caption: Toxic waste on the road. It has never smelled this before.
+    say: Toxic waste, for the first time.
+    drop: toxic
+    ahead: 24
+    until: pain
+    timeout_s: 12
+  - step: First contact
+    caption: Pain. Dopamine neurons fire, and the synapses carrying that smell weaken.
+    say: Pain. The synapses carrying that smell weaken.
+    until: passed
+    timeout_s: 14
+    wait_s: 2.5
+  - caption: Honey. Another new smell.
+    drop: honey
+    ahead: 26
+    until: feeding
+    timeout_s: 12
+  - caption: Sugar. A second set of dopamine neurons fires. Now that smell means food.
+    say: Sugar. Now that smell means food.
+    until: fed
+    timeout_s: 8
+    wait_s: 1.5
+  - step: Learned
+    caption: The same toxic smell. This time it never touches it.
+    drop: toxic
+    ahead: 30
+    until: passed
+    timeout_s: 14
+  - caption: Jev was never told what toxic means. It reads that from the brain.
+    say: Jev was never told what toxic means.
+    wait_s: 2.5
+  - caption: Honey, off to the side. Does it remember?
+    say: Honey, off to the side.
+    drop: honey
+    ahead: 30
+    side: away
+    until: feeding
+    timeout_s: 14
+  - caption: It goes out of its way for honey.
+    until: fed
+    timeout_s: 8
+    wait_s: 1.0
+  - step: Blocked
+    caption: Now the whole road is blocked.
+    drop: barrier
+    ahead: 30
+    until: landed
+    timeout_s: 25
+  - caption: No way round. Jev picks take-off, and it hops over.
+    say: Jev picks take-off, and it hops over.
+    wait_s: 3.0

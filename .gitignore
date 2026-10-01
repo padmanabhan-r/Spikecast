@@ -1,0 +1,34 @@
+# Data and recordings: never commit (see DATA_LICENSE.md)
+data/
+sessions/
+
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+
+# Web
+node_modules/
+web/dist/
+
+# Design working files (generated rasters; approved comps are committed explicitly)
+design/comps/_work/
+
+# Local tooling state
+.DS_Store
+.remember/
+# Impeccable: keep the surface briefs and shared config, ignore machine state and mocks
+.impeccable/*
+!.impeccable/surfaces/
+!.impeccable/config.json
+.claude/settings.local.json
+.claude/skills/impeccable/
+.claude/agents/impeccable-*.md

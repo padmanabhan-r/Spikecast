@@ -1,0 +1,33 @@
+# The experiment, paced so that each thing that happens can be told before the next:
+# punish one smell, reward another, let the fly choose, then startle it.
+# The script places things and sets the clock. It never tells the fly what to do.
+name: experiment
+title: The experiment
+frame_hz: 60
+scenes:
+  - id: punish
+    title: Smell A comes with a shock
+    arena: dish
+    duration_s: 18
+    fly: {x: -9, y: -3, heading_deg: 20}
+    odors: [{odor: A, uniform: true, start_s: 1.5, end_s: 16.5}]
+    shock: [6.0, 11.0]
+  - id: reward
+    title: Smell B comes with sugar
+    arena: dish
+    duration_s: 17
+    fly: {x: -11, y: 2, heading_deg: -8}
+    odors: [{odor: B, uniform: true, start_s: 1.0, end_s: 15.5}]
+    patches: [{kind: sugar, x: 0, y: 0, r: 10.0, start_s: 5.0, end_s: 11.0}]
+  - id: tmaze
+    title: The choice
+    arena: tmaze
+    duration_s: 18
+    fly: {x: 0, y: -19, heading_deg: 90}
+    odors: [{odor: A, arm: left}, {odor: B, arm: right}]
+  - id: looming
+    title: A threat
+    arena: dish
+    duration_s: 8
+    fly: {x: -8, y: -3, heading_deg: 10}
+    loom: {start_s: 3.0, duration_s: 1.2, bearing_deg: 10}

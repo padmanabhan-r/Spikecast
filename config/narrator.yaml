@@ -1,0 +1,28 @@
+# The commentary pipeline: Claude writes one sentence per event, a rule check passes it or
+# not, ElevenLabs speaks it. Nothing here can affect the fly.
+
+persona: nature_doc
+max_words: 20
+
+writer:
+  # Claude writes each line. Live commentary needs speed; a recorded broadcast does not.
+  live_model: claude-haiku-4-5
+  broadcast_model: claude-opus-5-5
+  effort: low # broadcast model only: a one-sentence task
+  # Used when there is no ANTHROPIC_API_KEY and the Anthropic SDK is pointed at OpenRouter.
+  openrouter_models:
+    claude-haiku-4-5: anthropic/claude-haiku-4.5
+    claude-opus-5-5: anthropic/claude-opus-5.5
+
+voice:
+  model: eleven_v4
+  # A stock ElevenLabs voice: "Morgan - Deep Storyteller Pro". Set ELEVENLABS_VOICE_ID in
+  # .env.local to use another; leave this empty to rely on that alone.
+  voice_id: SAxJUlDKRc79XAyeWyMu
+  settings: {stability: 0.5}
+  output_format: mp3_44100_192
+
+pacing:
+  gap_s: 0.7 # silence between lines
+  stale_s: 3.5 # an event older than this is dropped unless nothing else is waiting
+  words_per_second: 2.5 # used to place lines when there is no audio

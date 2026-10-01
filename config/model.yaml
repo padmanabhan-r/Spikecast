@@ -1,0 +1,41 @@
+# Changes Spikecast makes to the published connectome before simulating it.
+#
+# The LIF constants are untouched (config/lif.yaml). These are structural: whole blocks of
+# connections are silenced (weight set to zero). Each one is a modelled decision, taken after
+# the M0 feasibility gate (docs/M0_REPORT.md, sections 5 and 6) and listed in
+# docs/REAL_VS_MODELLED.md under "Deviations".
+#
+# A block is {pre, post}: group names from config/circuits.yaml, or `all`.
+
+silence:
+  - name: input_onto_projection_neurons
+    pre: all
+    post: [pn_all]
+    reason: >
+      In the unmodified model any odor input ignites the olfactory system: nearly every
+      projection neuron fires and two thirds of the Kenyon cells follow, so two odors become
+      one pattern. With every connection onto the projection neurons silenced, each odor
+      activates its own sparse set of Kenyon cells. The cost: receptor neurons, antennal lobe
+      processing and all feedback onto projection neurons are not simulated. Projection
+      neuron firing is set directly by the stimulus model.
+
+  - name: dopamine_neuron_output
+    pre: [ppl1, pam]
+    post: all
+    reason: >
+      The signed connectivity treats dopamine as fast excitation, so a punishment or reward
+      signal alone would drive Kenyon cells and output neurons. Dopamine neurons still spike,
+      and their firing rate is the teaching signal of the plasticity rule; their synapses
+      have no direct effect.
+
+  - name: input_onto_dopamine_neurons
+    pre: all
+    post: [ppl1, pam]
+    reason: >
+      Through the real wiring a smell alone makes two of the PPL1 neurons fire at about
+      30 Hz, with no punishment anywhere. Left in, that is enough to weaken a smell's
+      synapses while the fly merely stands in it, so a memory test would itself teach. With
+      every connection onto the dopamine neurons silenced they fire only when the stimulus
+      model drives them: PPL1 on pain, PAM while feeding. The cost: the mushroom body's
+      feedback onto its own dopamine neurons, which real flies use to compare what they
+      expected with what happened, is not simulated.
