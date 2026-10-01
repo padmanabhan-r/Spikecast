@@ -123,4 +123,4 @@ The whole ledger, with caveats, is [docs/REAL_VS_MODELLED.md](docs/REAL_VS_MODEL
 - **Neuron model**: Shiu et al. 2024, *A Drosophila computational brain model reveals sensorimotor processing*, Nature.
 - **Decisions**: [Jev](https://typesafe.ai), by TypeSafe AI.
 - **Voice, in and out**: ElevenLabs. **Maze commentary**: written by Claude, then checked by rule against what the recording shows.
-- **Code**: all rights reserved. It is published to be read; using it needs my permission first. See [LICENSE](LICENSE).
+- **Code**: [PolyForm Noncommercial 1.0.0](LICENSE), with attribution. You may run, study and change it for non-commercial purposes, and anything you publish or show that was made with it must credit "Spikecast by Padmanabhan" with a link to this repository. Commercial use needs my permission first.

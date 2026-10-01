@@ -1,6 +1,6 @@
 # Data licence and attribution
 
-The notice in `LICENSE` covers the code in this repository only. It does not cover the connectome data.
+The licence in `LICENSE` covers the code in this repository only. It does not cover the connectome data.
 
 ## What the data is
 
