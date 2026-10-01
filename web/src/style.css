@@ -485,6 +485,10 @@ body {
 }
 
 #frame[data-film][data-layout="road"] #caption {
+  /* a plate, so the words yet to be said stay readable when honey passes under them */
+  padding: 0.22em 0.7em 0.3em;
+  border-radius: 0.45em;
+  background: color-mix(in srgb, var(--ground) 82%, transparent);
   font-size: calc(4.2 * var(--u));
   line-height: 1.16;
   max-width: 24em;
@@ -494,6 +498,11 @@ body {
 
 #frame[data-film] #caption span {
   transition: none;
+}
+
+#frame[data-film][data-layout="road"] #caption:empty {
+  padding: 0;
+  background: none;
 }
 
 /* Story: the layout a first-time viewer meets. The world on the left, the fly's brain on the

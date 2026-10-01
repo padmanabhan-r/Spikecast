@@ -33,7 +33,10 @@ export class Captions {
 
   /** Show whatever should be on screen at time t (seconds from the start of the film). */
   at(t: number): void {
-    const line = this.lines.find((l) => t >= l.start_s && t < l.end_s + 0.45) ?? null;
+    // A line lingers a moment after it is said, but the next one takes over as soon as it
+    // starts: the caption never trails the voice.
+    let line: (typeof this.lines)[number] | null = null;
+    for (const l of this.lines) if (t >= l.start_s && t < l.end_s + 0.45) line = l;
     if (line !== this.current) {
       this.current = line;
       this.el.replaceChildren();
