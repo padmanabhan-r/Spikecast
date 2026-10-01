@@ -25,6 +25,8 @@ exists now.
   demonstration with a control, not a measured effect size.
 - **Live commentary.** Commentary is generated for recordings, not during a live run.
 - **`DESIGN.md`** has not been written from the built viewer.
-- **The neuro fact-check** of the glossary was run once and its corrections applied; the
-  changed entries have not been re-checked.
+- **The neuro fact-check** was run twice (the glossary, the circuit roles, the explainer and
+  the film's narration) and its corrections applied. A dozen of its sources were not opened
+  on the second pass, only recalled, and the paywalled ones were read as abstracts or
+  mirrors. It is a careful reading, not a review by a fly neuroscientist.
 - **Publishing.** Commits are local. Nothing has been pushed; there is no remote.
