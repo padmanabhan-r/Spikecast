@@ -58,11 +58,18 @@ try {
   });
 
   const started = Date.now();
+  // A page that reloads under us (a dev server's hot reload) leaves a seek waiting for ever, so
+  // each frame has a deadline and a missed one stops the render instead of stalling it.
+  const within = (promise, what) =>
+    Promise.race([
+      promise,
+      new Promise((_, fail) => setTimeout(() => fail(new Error(`${what} took over 60 s: did the page reload?`)), 60000)),
+    ]);
   // The picture carries state forward, so frames before --from are sought too, just not kept.
   for (let i = Math.max(0, first - Math.round(fps)); i <= last; i++) {
-    await browser.evaluate(`film.seek(${i / fps})`, true);
+    await within(browser.evaluate(`film.seek(${i / fps})`, true), `seeking frame ${i}`);
     if (i < first) continue;
-    const { data } = await browser.page("Page.captureScreenshot", { format: "png" });
+    const { data } = await within(browser.page("Page.captureScreenshot", { format: "png" }), `capturing frame ${i}`);
     if (!ffmpeg.stdin.write(Buffer.from(data, "base64"))) {
       await new Promise((r) => ffmpeg.stdin.once("drain", r));
     }
