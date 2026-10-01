@@ -77,7 +77,7 @@ function titleCase(key: string): string {
 
 function question(data: FilmData, brain: BrainView): Scene {
   const s = data.sentences;
-  // On screen from the first frame, for a viewer with the sound off.
+  // The film opens on a question and holds back what it is. This line arrives with the reveal.
   const tag = el("p", "tag", "A Jev project <i>·</i> a decision model at the controls of a simulated fruit fly brain");
   return {
     captions: "hero",
@@ -91,7 +91,7 @@ function question(data: FilmData, brain: BrainView): Scene {
       brain.pan = 0;
       // The caption changes line 0.08 s before each sentence, and its size changes with it.
       band.dataset.tone = t >= s[2].start - 0.08 && t < s[3].start - 0.08 ? "ask" : "";
-      show(tag, 1, 0);
+      show(tag, rise(t, s[3].start, 0.7), 0);
     },
   };
 }

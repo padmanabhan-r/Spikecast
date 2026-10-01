@@ -33,7 +33,7 @@ LEAD = {"title": 1.4, "concept": 0.6, "run": 1.8, "how": 0.6, "close": 0.5}
 # How long each section's picture runs. These are locked: the score was composed to them, one
 # musical section per act. A new voice has to fit inside them.
 LENGTH = {
-    "question": 16.48,
+    "question": 22.60,
     "title": 7.96,
     "concept": 25.70,
     "run": 47.62,
