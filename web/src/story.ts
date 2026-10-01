@@ -15,7 +15,7 @@ const PARTS: { anchor: string; label: string; tone: string; at: [number, number]
   { anchor: "mushroom_body_right", label: "memory", tone: "odor-a", at: [0.8, 0.2], level: (f) => (f.rates.kc ?? 0) / 0.6 },
   { anchor: "dopamine_punish", label: "punishment signal", tone: "punish", at: [0.2, 0.14], level: (f) => (f.rates.ppl1 ?? 0) / 60 },
   { anchor: "antennal_lobe", label: "smell comes in", tone: "rest", at: [0.17, 0.82], level: (f) => Math.max(f.rates.odor_a_pn ?? 0, f.rates.odor_b_pn ?? 0) / 60 },
-  { anchor: "giant_fiber", label: "fast-escape trigger", tone: "escape", at: [0.83, 0.84], level: (f) => Math.max((f.rates.dnp01 ?? 0) / 20, (f.rates.lplc2 ?? 0) / 40) },
+  { anchor: "giant_fiber", label: "fast escape", tone: "escape", at: [0.83, 0.84], level: (f) => Math.max((f.rates.dnp01 ?? 0) / 20, (f.rates.lplc2 ?? 0) / 40) },
 ];
 
 const SVG = "http://www.w3.org/2000/svg";
