@@ -120,7 +120,12 @@ def run_plan(clock: dict) -> dict:
         speed = (d - c) / (b - a)
         note = "" if 0.3 <= speed <= 1.8 else "   <-- check this speed"
         print(f"    film {a:6.2f}-{b:6.2f}  run {c:6.2f}-{d:6.2f}  x{speed:.2f}{note}")
-    return {"segments": [[round(v, 3) for v in seg] for seg in segments]}
+    summary = json.loads((ROAD / "summary.json").read_text())
+    return {
+        "segments": [[round(v, 3) for v in seg] for seg in segments],
+        # counted from the recording, shown as the run ends
+        "facts": {"decisions": summary["decisions"], "takeoffs": summary["hops"]},
+    }
 
 
 def jev_data() -> dict:

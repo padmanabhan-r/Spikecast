@@ -76,18 +76,22 @@ function titleCase(key: string): string {
 // --- the sections ---------------------------------------------------------------------------
 
 function question(data: FilmData, brain: BrainView): Scene {
-  const where = wordTime(data, "where");
+  const s = data.sentences;
+  // On screen from the first frame, for a viewer with the sound off.
+  const tag = el("p", "tag", "A fruit fly’s brain, simulated from its real wiring <i>·</i> a decision model at the controls");
   return {
     captions: "hero",
     // The first spikes after a smell arrives, slowed eight times: a signal crossing the brain.
     sim: (t) => (t < data.sentences[1].start ? null : 4.2 + (t - data.sentences[1].start) * 0.12),
     update(t) {
       // Out of the dark, slowly, pushing in.
-      brain.restLevel = 0.05 + 0.5 * glide(t, 0.5, data.length - 1);
+      brain.restLevel = 0.34 + 0.5 * glide(t, 0.5, data.length - 1);
       brain.dolly = 1.55 - 0.3 * glide(t, 0, data.length);
       brain.spikeLevel = 0.9;
       brain.pan = 0;
-      band.dataset.tone = t >= where && t < data.sentences[3].start ? "ask" : "";
+      // The caption changes line 0.08 s before each sentence, and its size changes with it.
+      band.dataset.tone = t >= s[2].start - 0.08 && t < s[3].start - 0.08 ? "ask" : "";
+      show(tag, 1, 0);
     },
   };
 }
@@ -100,14 +104,15 @@ function title(data: FilmData, brain: BrainView): Scene {
     // The moment the fly is hurt: the brain at its brightest.
     sim: (t) => 6.35 + t * 0.45,
     update(t) {
+      const out = 1 - rise(t, data.length - 0.5, 0.45);
       brain.restLevel = 0.55 + 0.75 * rise(t, 0, 0.5);
       brain.dolly = 1.25 - 0.12 * glide(t, 0, data.length);
-      brain.spikeLevel = 1.15;
+      brain.spikeLevel = 1.15 * out;
       brain.pan = 0;
       const letters = rise(t, 0.05, 0.9);
-      mark.style.opacity = letters.toFixed(3);
+      mark.style.opacity = (letters * out).toFixed(3);
       mark.style.letterSpacing = `${(0.42 - 0.2 * letters).toFixed(3)}em`;
-      show(sub, hold(t, 0.9, data.length - 0.2));
+      show(sub, hold(t, 0.9, data.length - 0.5));
       mark.style.visibility = "visible";
     },
   };
@@ -119,7 +124,10 @@ function concept(data: FilmData, brain: BrainView): Scene {
   const neurons = el("div", "fact", `<b></b><span>neurons</span>`, column);
   const synapses = el("div", "fact", `<b></b><span>synapses between them</span>`, column);
   const source = el("p", "fact-note", "Mapped by FlyWire in one adult female fruit fly. 138,639 of them run in this simulation.", column);
-  const on = el("p", "legend", "<i></i>every flash: one neuron firing, in the simulation");
+  const on = el("div", "legend", "<p><i></i>every point of light: one neuron</p><p><i class=\"flash\"></i>every flash: that neuron firing, in the simulation</p>");
+  const flash = on.querySelectorAll<HTMLElement>("p")[1];
+  const canvas = document.querySelector<HTMLElement>("#brain")!;
+  const tPoint = wordTime(data, "point");
   const tNeurons = wordTime(data, "thirty-nine");
   const tSynapses = wordTime(data, "fifty");
   const tSource = wordTime(data, "published");
@@ -132,9 +140,12 @@ function concept(data: FilmData, brain: BrainView): Scene {
     captions: "band",
     sim: (t) => (t < tOn ? null : 16.6 + (t - tOn) * 0.55),
     update(t) {
-      brain.restLevel = 1.1;
-      brain.dolly = 1.36 - 0.08 * glide(t, 0, data.length);
-      brain.pan = -0.2 * (1 - glide(t, tBody - 0.4, 1.6));
+      // The title left the brain centred, lower and closer: it slides from there to its place.
+      const enter = glide(t, 0, 1.2);
+      brain.restLevel = 1.3 - 0.2 * enter;
+      brain.dolly = 1.13 + 0.23 * enter - 0.08 * glide(t, 0, data.length);
+      brain.pan = -0.2 * enter * (1 - glide(t, tBody - 0.4, 1.6));
+      canvas.style.transform = `translateY(${(7 * (1 - enter)).toFixed(3)}%)`;
       brain.spikeLevel = rise(t, tOn, 0.8);
       const away = 1 - rise(t, tOn - 0.5, 0.7);
       show(column, Math.min(rise(t, tNeurons - 0.15, 0.6), away));
@@ -142,7 +153,8 @@ function concept(data: FilmData, brain: BrainView): Scene {
       show(synapses, rise(t, tSynapses - 0.15, 0.6));
       synapses.querySelector("b")!.textContent = `${count(Number(f.synapses_millions ?? 50), 0, t, tSynapses - 0.15)} million`;
       show(source, rise(t, tSource - 0.4, 0.6));
-      show(on, hold(t, tFlash - 0.3, tBody - 0.2));
+      show(on, hold(t, tPoint - 0.3, tBody - 0.2));
+      show(flash, rise(t, tFlash - 0.3, 0.5), 14);
     },
   };
 }
@@ -159,6 +171,7 @@ function jev(data: FilmData, brain: BrainView): Scene {
     "jev-name",
     `<b>Jev</b><span>a decision model by TypeSafe AI</span><em>${f.decisions} decisions in that run, from ${f.questions} distinct questions to Jev. None fell to the backup rules.</em>`,
   );
+  const nameNote = name.querySelector<HTMLElement>("em")!;
   // The question and its answer.
   const ask = el("div", "panel ask", `<p class="kicker">Asked five times every simulated second</p><h3>What should the fly do next?</h3>`);
   const bars = Object.keys(ACTIONS).map((key) => {
@@ -233,6 +246,9 @@ function jev(data: FilmData, brain: BrainView): Scene {
 
       show(who, hold(t, 0.05, tName - 0.05, 0.35));
       show(name, hold(t, tName, tPair - 0.3));
+      const settled = glide(t, tAsk - 0.6, 0.8);
+      name.style.transform = `translateY(calc(${((1 - settled) * 30).toFixed(2)} * var(--u))) scale(${(1.75 - 0.75 * settled).toFixed(3)})`;
+      show(nameNote, Math.min(rise(t, tAsk + 0.2, 0.5), 1 - rise(t, tTold - 0.5, 0.4)), 0);
       show(ask, hold(t, tAsk, tNever - 0.25));
       const answered = rise(t, tBars, 0.9);
       for (const bar of bars) {
@@ -270,7 +286,7 @@ function how(data: FilmData, brain: BrainView): Scene {
   const whole = node("n-brain", "The spiking brain", "138,639 neurons, real wiring");
   const memory = node("n-memory", "Mushroom body", "memory: synapses weaken");
   const jevNode = node("n-jev", "Jev", "picks one of six actions");
-  const command = node("n-command", "Command neuron", "DNp09 · DNa02 · MDN · DNp01");
+  const command = node("n-command", "Command neuron", "DNp09 · DNa02<br>MDN · DNp01");
   const body = node("n-body", "The body", "walks, turns, feeds, jumps");
   const loop = el("div", "loop", "and the road changes what it senses next", flow);
   const voice = el("div", "voice");
@@ -294,13 +310,16 @@ function how(data: FilmData, brain: BrainView): Scene {
 
   return {
     captions: "band",
-    sim: (t) => 40 + t * 0.4,
+    // a stretch of the run with no pain in it: a flash of pain would light the whole frame red
+    sim: (t) => 20 + t * 0.4,
     update(t) {
       // The diagram is the picture here; the brain is a faint presence behind it.
-      brain.pan = 0;
-      brain.dolly = 1.25;
-      brain.restLevel = 0.1;
-      brain.spikeLevel = 0.08;
+      const enter = glide(t, 0, 1.4);
+      const dimmed = glide(t, 0.3, s[1].start);
+      brain.pan = 0.3 * (1 - enter);
+      brain.dolly = 1.72 - 0.47 * enter;
+      brain.restLevel = 1.2 - 1.1 * dimmed;
+      brain.spikeLevel = 1.1 - 1.02 * dimmed;
       show(heading, hold(t, 0.05, s[1].start + 0.3, 0.35));
       steps.forEach(([nodeEl, at], i) => {
         show(nodeEl, rise(t, at - 0.15, 0.5), 18);
@@ -309,8 +328,9 @@ function how(data: FilmData, brain: BrainView): Scene {
         nodeEl.classList.toggle("lit", t >= at - 0.15 && t < next - 0.15);
       });
       show(loop, rise(t, steps[6][1] + 0.6, 0.6), 0);
-      flow.style.opacity = (1 - 0.45 * rise(t, tTalk, 0.6)).toFixed(3);
-      flow.style.transform = `translateY(${(-60 * glide(t, tTalk - 0.2, 0.9)).toFixed(1)}px) scale(${(1 - 0.08 * glide(t, tTalk - 0.2, 0.9)).toFixed(3)})`;
+      // Dimmed, not faded: a see-through card lets the brain's flashes run under its words.
+      flow.style.filter = `brightness(${(1 - 0.5 * rise(t, tTalk, 0.6)).toFixed(3)})`;
+      flow.style.transform = `translateY(calc(${(-5.5 * glide(t, tTalk - 0.2, 0.9)).toFixed(2)} * var(--u)))`;
       show(voice, rise(t, tTalk + 0.2, 0.5));
       show(v1, rise(t, tVoice - 0.3, 0.5), 18);
       show(v2, rise(t, tWords - 1.2, 0.5), 18);
@@ -346,7 +366,7 @@ function close(data: FilmData, brain: BrainView): Scene {
   const end = el(
     "div",
     "endcard",
-    `<h1>Spikecast</h1><p class="repo">${f.repo}</p><p class="credits">FlyWire <i>·</i> Jev by TypeSafe AI <i>·</i> ElevenLabs</p><p class="cite">Connectome: Dorkenwald et al. 2024, Schlegel et al. 2024 (CC BY-NC 4.0). Neuron model: Shiu et al. 2024.</p>`,
+    `<h1>Spikecast</h1><p class="repo"><span>Open the repo</span>${f.repo}</p><p class="credits">FlyWire <i>·</i> Jev by TypeSafe AI <i>·</i> ElevenLabs</p><p class="cite">Connectome: Dorkenwald et al. 2024, Schlegel et al. 2024 (CC BY-NC 4.0). Neuron model: Shiu et al. 2024.</p>`,
   );
   const tLines = [s[2].start, s[3].start, s[4].start];
   const tEnd = s[5].start;
@@ -356,7 +376,7 @@ function close(data: FilmData, brain: BrainView): Scene {
     sim: (t) => 6.2 + t * 0.35,
     update(t) {
       brain.pan = 0;
-      brain.dolly = 1.5 - 0.14 * glide(t, 0, data.length);
+      brain.dolly = 2.0 - 0.6 * glide(t, tLines[0] - 0.4, data.length - tLines[0]);
       brain.restLevel = 0.35 + 0.85 * rise(t, tEnd - 0.2, 1.2);
       brain.spikeLevel = 0.45 + 0.6 * rise(t, tEnd, 1.0);
       show(ledger, hold(t, 0.1, tLines[0] - 0.25));
@@ -443,6 +463,8 @@ async function main(): Promise<void> {
   }
 
   (window as unknown as Record<string, unknown>).film = { duration: data.length, fps: FPS, seek };
+  scene.update(0);
+  brain.snap();
   await seek(0);
   document.body.dataset.ready = "1";
 

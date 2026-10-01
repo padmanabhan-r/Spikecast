@@ -396,6 +396,94 @@ body {
   padding: 0 calc(16 * var(--u));
 }
 
+/* A soft dark pool behind the film's caption, so it reads over the honey and the smell. */
+#frame[data-film][data-layout="road"] #band {
+  background: radial-gradient(ellipse 44% 80% at 50% 50%, color-mix(in srgb, var(--ground) 78%, transparent), transparent);
+}
+
+.film-toast,
+.film-recap,
+.film-note {
+  position: absolute;
+  z-index: 3;
+  color: var(--ink);
+  visibility: hidden;
+}
+
+/* A memory forming, said large enough to read on a phone. */
+.film-toast {
+  left: 33%;
+  top: 4.5%;
+  display: flex;
+  align-items: center;
+  gap: 0.6em;
+  padding: 0.5em 1em;
+  border-radius: 999px;
+  font-size: calc(3.5 * var(--u));
+  color: var(--ink-dim);
+  background: color-mix(in srgb, var(--ground) 86%, transparent);
+  outline: 1px solid color-mix(in srgb, var(--ink) 18%, transparent);
+}
+
+.film-toast i {
+  width: 0.55em;
+  height: 0.55em;
+  border-radius: 50%;
+}
+
+.film-toast b {
+  font-weight: 500;
+}
+
+.film-toast :is(i, b).a {
+  --tone: var(--odor-a);
+}
+
+.film-toast :is(i, b).b {
+  --tone: var(--odor-b);
+}
+
+.film-toast i {
+  background: var(--tone);
+}
+
+.film-toast b {
+  color: var(--tone);
+}
+
+/* The run in three numbers, in the caption's place once the voice has finished. */
+.film-recap {
+  left: 0;
+  right: 0;
+  bottom: 9%;
+  display: flex;
+  justify-content: center;
+  gap: 2.4em;
+  font-size: calc(4.2 * var(--u));
+  color: var(--ink-dim);
+  text-shadow: 0 0 calc(2 * var(--u)) var(--ground), 0 0 calc(0.6 * var(--u)) var(--ground);
+}
+
+.film-recap span {
+  visibility: hidden;
+}
+
+.film-recap b {
+  margin-right: 0.25em;
+  font-weight: 500;
+  font-size: 1.5em;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.film-note {
+  visibility: visible;
+  right: calc(4 * var(--u));
+  bottom: calc(1.5 * var(--u));
+  font-size: calc(1.9 * var(--u));
+  color: var(--ink-dim);
+}
+
 #frame[data-film][data-layout="road"] #caption {
   font-size: calc(4.2 * var(--u));
   line-height: 1.16;

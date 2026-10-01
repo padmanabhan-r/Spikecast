@@ -4,7 +4,7 @@ import { BrainView, type Shot } from "./brain";
 import { Captions } from "./captions";
 import { LiveSocket, Session, loadStatic } from "./data";
 import { Diagnostics } from "./diagnostics";
-import { type Clock, pinAnimations } from "./filmtime";
+import { type Clock, hold, pinAnimations, rise } from "./filmtime";
 import { Hud } from "./hud";
 import { RoadView } from "./road";
 import { Voice } from "./voice";
@@ -358,6 +358,7 @@ async function main(): Promise<void> {
       const plan = (await fetch(`/film/${filmSection}.json`).then((r) => r.json())) as Clock & {
         length: number;
         segments: [number, number, number, number][];
+        facts?: Record<string, number>;
       };
       frame.dataset.film = filmSection;
       let w = 0;
@@ -370,6 +371,54 @@ async function main(): Promise<void> {
         }),
       };
       captions.loadSilent(narration);
+
+      // Words the film lays over the app, each placed by film time.
+      const note = (className: string, html: string): HTMLElement => {
+        const node = document.createElement("div");
+        node.className = className;
+        node.innerHTML = html;
+        frame.append(node);
+        return node;
+      };
+      const fade = (node: HTMLElement, amount: number): void => {
+        node.style.opacity = amount.toFixed(3);
+        node.style.visibility = amount <= 0.001 ? "hidden" : "visible";
+      };
+      // When the recorded run reaches a moment, in film time; a moment the film cuts past
+      // lands on the cut.
+      const filmTime = (run: number | null): number | null => {
+        if (run === null) return null;
+        for (const [from, to, a, b] of plan.segments) {
+          if (run <= b) return run <= a ? from : from + ((run - a) / (b - a)) * (to - from);
+        }
+        return null;
+      };
+      // A memory is called out, large, when the synapses first carry it (the same test the
+      // readout's label uses).
+      const formed = [
+        { at: filmTime(session.firstTime((v) => v("a_approach") - v("a_avoid") <= -0.2)), html: `<i class="a"></i>memory formed <b class="a">toxic smell: aversive</b>` },
+        { at: filmTime(session.firstTime((v) => v("b_approach") - v("b_avoid") >= 0.2)), html: `<i class="b"></i>memory formed <b class="b">honey smell: attractive</b>` },
+      ]
+        .filter((m): m is { at: number; html: string } => m.at !== null)
+        .map((m) => ({ at: m.at, node: note("film-toast", m.html) }));
+      const facts = plan.facts ?? {};
+      const recap = note(
+        "film-recap",
+        `<span><b>${facts.decisions}</b> decisions</span><span><b>${formed.length}</b> memories formed</span><span><b>${facts.takeoffs}</b> take-off</span>`,
+      );
+      const tRecap = plan.sentences[plan.sentences.length - 1].end + 0.9;
+      note("film-note", "the smells, the pain signal, the body and the learning rule are modelled");
+      // Where the film skips ahead in the run, the picture dips for a few frames.
+      const cuts = plan.segments.slice(1).filter((seg, i) => seg[2] - plan.segments[i][3] > 0.5).map((seg) => seg[0]);
+      const canvases = [$("arena"), $("brain")];
+      const overlays = (t: number): void => {
+        for (const m of formed) fade(m.node, hold(t, m.at + 0.2, m.at + 4.6, 0.4));
+        Array.from(recap.children).forEach((child, i) => fade(child as HTMLElement, rise(t, tRecap + i * 0.4, 0.5)));
+        fade(recap, 1);
+        const near = Math.min(1, ...cuts.map((cut) => Math.abs(t - cut) / 0.2));
+        for (const canvas of canvases) canvas.style.opacity = (0.3 + 0.7 * near).toFixed(3);
+      };
+
       const runTime = (t: number): number => {
         let seg = plan.segments[0];
         for (const candidate of plan.segments) if (t >= candidate[0]) seg = candidate;
@@ -402,6 +451,7 @@ async function main(): Promise<void> {
             cursor = target;
           }
           hud?.setCount(session.decisionsThrough(target));
+          overlays(t);
           render(step);
           captions.at(t);
           pinAnimations(t);

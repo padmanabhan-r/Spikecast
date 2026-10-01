@@ -11,6 +11,29 @@
   inset: 0;
   width: 100%;
   height: 100%;
+  /* The canvas is moved up or down in some sections: its edge fades out, with no seam. */
+  mask-image: linear-gradient(to bottom, transparent 0, #000 9%, #000 91%, transparent 100%);
+}
+
+/* The question: the brain above, the words below it. */
+#frame[data-section="question"] #brain {
+  transform: translateY(-11%);
+}
+
+.tag {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 5.5%;
+  text-align: center;
+  font-size: calc(3.3 * var(--u));
+  color: var(--ink-dim);
+}
+
+.tag i {
+  font-style: normal;
+  margin: 0 0.5em;
+  color: color-mix(in srgb, var(--ink-dim) 55%, transparent);
 }
 
 #stage {
@@ -112,9 +135,8 @@
   right: 0;
   top: 27%;
   text-align: center;
-  font-size: calc(3.4 * var(--u));
-  font-style: italic;
-  color: var(--ink-dim);
+  font-size: calc(5.4 * var(--u));
+  color: color-mix(in srgb, var(--ink) 82%, transparent);
 }
 
 /* --- concept ----------------------------------------------------------------------------- */
@@ -122,7 +144,8 @@
 .facts {
   position: absolute;
   left: 61%;
-  top: 22%;
+  right: calc(7 * var(--u));
+  top: 20%;
   display: grid;
   gap: calc(3.4 * var(--u));
 }
@@ -142,25 +165,40 @@
 }
 
 .fact-note {
-  font-size: calc(2.4 * var(--u));
-  font-style: italic;
+  font-size: calc(3 * var(--u));
+  line-height: 1.3;
   color: var(--ink-dim);
 }
 
 .legend {
   position: absolute;
-  left: 64%;
-  top: 40%;
-  max-width: 16em;
-  font-size: calc(3.4 * var(--u));
-  line-height: 1.25;
+  left: 56%;
+  right: calc(6 * var(--u));
+  top: 36%;
+  display: grid;
+  gap: 0.9em;
+  font-size: calc(4.2 * var(--u));
+  line-height: 1.18;
+  letter-spacing: -0.01em;
+}
+
+.legend p {
+  padding-left: 1.3em;
+  text-indent: -1.3em;
+}
+
+/* a neuron at rest is a dim blue point; a flash is the same point, bright */
+.legend i:not(.flash) {
+  background: var(--neuron-rest);
+  box-shadow: none;
 }
 
 .legend i {
   display: inline-block;
   width: 0.5em;
   height: 0.5em;
-  margin-right: 0.6em;
+  margin-right: 0.8em;
+  text-indent: 0;
   border-radius: 50%;
   background: #fff;
   box-shadow: 0 0 0.8em 0.25em color-mix(in srgb, var(--neuron-rest) 80%, transparent);
@@ -182,8 +220,8 @@
 }
 
 .big.small {
-  top: 12%;
-  font-size: calc(5.4 * var(--u));
+  top: 9%;
+  font-size: calc(8 * var(--u));
 }
 
 .big.punch {
@@ -274,6 +312,7 @@
   top: calc(6 * var(--u));
   display: grid;
   gap: 0.25em;
+  transform-origin: 0 0;
 }
 
 .jev-name b {
@@ -352,12 +391,13 @@
 }
 
 #frame[data-section="jev"] .panel.told {
-  left: calc(56 * var(--u));
-  top: 25%;
-  width: calc(58 * var(--u));
-  gap: calc(0.55 * var(--u));
+  left: calc(62 * var(--u));
+  top: 13%;
+  width: calc(61 * var(--u));
+  gap: calc(0.5 * var(--u));
   padding: calc(2.2 * var(--u)) calc(3 * var(--u));
-  font-size: calc(2.45 * var(--u));
+  font-size: calc(3 * var(--u));
+  background: var(--ground);
 }
 
 #frame[data-section="jev"] .panel.told .row {
@@ -425,9 +465,9 @@
   top: 22%;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
+  grid-auto-rows: 1fr;
   gap: calc(6.5 * var(--u)) calc(5 * var(--u));
   visibility: visible !important;
-  transform-origin: 50% 0;
 }
 
 .node {
@@ -436,8 +476,10 @@
   gap: 0.3em;
   padding: calc(2.4 * var(--u)) calc(2.6 * var(--u));
   border-radius: calc(1.8 * var(--u));
-  background: color-mix(in srgb, var(--ground) 82%, transparent);
+  /* opaque: the brain's flashes must not run under a card's words */
+  background: color-mix(in srgb, var(--ink) 4%, var(--ground));
   outline: 1px solid color-mix(in srgb, var(--ink) 18%, transparent);
+  align-content: center;
 }
 
 .node b {
@@ -527,15 +569,20 @@
   font-style: normal;
 }
 
+/* The voice path sits on the loop's own grid, so its Jev lands under the loop's Jev. */
 .voice {
   position: absolute;
-  left: calc(18 * var(--u));
-  right: calc(18 * var(--u));
+  left: calc(7 * var(--u));
+  right: calc(7 * var(--u));
   top: 62%;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: calc(5 * var(--u));
   visibility: visible !important;
+}
+
+.voice .node.v:first-child {
+  grid-column: 2;
 }
 
 .voice .node.v:not(:last-child)::after {
@@ -552,7 +599,7 @@
    Type in the upper half, the brain in the lower. */
 
 #frame[data-section="close"] #brain {
-  transform: translateY(17%);
+  transform: translateY(13%);
 }
 
 .ledger {
@@ -627,6 +674,11 @@
 .endcard .repo {
   font-size: calc(4 * var(--u));
   color: var(--ink);
+}
+
+.endcard .repo span {
+  margin-right: 0.7em;
+  color: var(--odor-b);
 }
 
 .endcard .credits {

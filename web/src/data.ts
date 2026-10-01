@@ -66,6 +66,14 @@ export class Session {
     return this.meta.n_frames;
   }
 
+  /** The first moment of the run, in seconds, at which the world passes a test. */
+  firstTime(test: (value: (key: string) => number) => boolean): number | null {
+    for (let i = 0; i < this.frameCount; i++) {
+      if (test((key) => this.columns[key]?.[i] as number)) return i / this.meta.frame_hz;
+    }
+    return null;
+  }
+
   /** The last decision made at or before a frame, if there has been one. */
   lastDecision(index: number): unknown[] | null {
     const column = this.columns.decision;

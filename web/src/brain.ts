@@ -434,6 +434,15 @@ export class BrainView {
     this.cometMaterial.uniforms.uScale.value = scale * 0.012;
   }
 
+  /** Put the camera where it is heading, now. A film section opens already framed, so the
+   *  brain does not travel there from its default place in the first second. */
+  snap(): void {
+    const goal = this.target.position.clone();
+    goal.z *= this.dolly;
+    this.camera.position.copy(goal);
+    this.look.copy(this.target.look);
+  }
+
   render(dt: number): void {
     // Ease the camera: one move per event, never a snap. A slow drift keeps frame 1 alive.
     const ease = 1 - Math.exp(-dt / 0.45);
