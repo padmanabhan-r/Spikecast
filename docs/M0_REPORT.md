@@ -62,7 +62,7 @@ Not compared with the reference: visual input, taste at other rates, any modifie
 
 ## 2. Benchmark
 
-Simulated seconds per wall-clock second. PLAN.md's target for live mode is ≥ 0.25×. The two scenarios were timed back to back, alternating, three repeats on CPU (median, with the range); MPS was timed once.
+Simulated seconds per wall-clock second. The project plan's target for live mode is ≥ 0.25×. The two scenarios were timed back to back, alternating, three repeats on CPU (median, with the range); MPS was timed once.
 
 | Device | Step | Calm (sugar, about 13,000 spikes/s) | Ignited (odor A, 530,000 to 590,000 spikes/s) |
 |---|---|---|---|
@@ -175,8 +175,8 @@ The two rules written in advance, applied as written, then my reading.
 ### What I need from you
 
 1. **Odor pathway.** Adopt the tested change (projection neurons are stimulus-driven inputs; everything onto them is silenced), or look for a narrower fix first. I recommend adopting it, labelled plainly: "receptor neurons, antennal lobe processing and all feedback onto projection neurons are not simulated; projection neuron firing is set by the stimulus model". The risk is the weak MBON response.
-2. **Dopamine.** Silence the direct synaptic output of the dopamine neurons in the spiking network, and use their firing rate only as the teaching signal. PLAN.md §8 already uses the rate as the teaching signal; removing their synapses is new. Without it, a punishment signal alone activates 1,600 to 8,700 neurons.
-3. **Default device.** PLAN.md says CUDA, then MPS, then CPU. I recommend CUDA, then CPU, with MPS only on request.
+2. **Dopamine.** Silence the direct synaptic output of the dopamine neurons in the spiking network, and use their firing rate only as the teaching signal. The project plan already uses the rate as the teaching signal; removing their synapses is new. Without it, a punishment signal alone activates 1,600 to 8,700 neurons.
+3. **Default device.** The project plan says CUDA, then MPS, then CPU. I recommend CUDA, then CPU, with MPS only on request.
 4. **Premotor bridge.** Accept my reading over the pre-set rule: a bridge is required for steering, and forward walking needs a modelled drive because DNp09 did not fire in any condition measured (it was not recorded under the section 5 change). Both would be new modelled parts.
 
 ## 7. Other findings
@@ -197,7 +197,7 @@ The two rules written in advance, applied as written, then my reading.
 - Any modified connectome against the reference.
 - Spread: the reachability table reports five-seed means; exploratory runs have two seeds.
 
-## 9. Proposed changes to PLAN.md
+## 9. Proposed changes to the project plan
 
 Not made. They depend on your answers.
 

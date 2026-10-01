@@ -1,8 +1,8 @@
 # Status
 
-Updated 2026-10-01. The project changed direction on this day (see "Direction" at the top of
-`PLAN.md`): the milestone list in PLAN.md §14 describes the first design. This file says what
-exists now.
+Updated 2026-10-01. The project changed direction on this day, from a fly in a dish to a fly
+on a road with Jev choosing its actions. This file says what exists now. (The project plan
+that the reports cite is a working document and is not in this repository.)
 
 | Part | State | Evidence |
 |---|---|---|

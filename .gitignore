@@ -21,16 +21,12 @@ __pycache__/
 node_modules/
 web/dist/
 
-# Design working files (generated rasters; approved comps are committed explicitly)
-design/comps/_work/
-
-# Local tooling state
+# Working files: plans, design comps, and assistant and tooling settings stay on the machine
 .DS_Store
 .remember/
-# Impeccable: keep the surface briefs and shared config, ignore machine state and mocks
-.impeccable/*
-!.impeccable/surfaces/
-!.impeccable/config.json
-.claude/settings.local.json
-.claude/skills/impeccable/
-.claude/agents/impeccable-*.md
+.claude/
+.impeccable/
+CLAUDE.md
+PLAN.md
+PRODUCT.md
+design/

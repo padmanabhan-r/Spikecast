@@ -1,6 +1,6 @@
 /* Spikecast design tokens: the Dark-field direction.
    Source of truth until DESIGN.md is written from the built viewer (after M1):
-   .impeccable/surfaces/web-index-html.md and design/comps/darkfield.png. */
+   the project's design brief and its approved comp. */
 
 :root {
   /* Ground and ink */
@@ -46,7 +46,7 @@
   --arena-h: 39%;
 }
 
-/* 9:16 gives the captions more headroom, per PLAN.md 11.4. Not comped. */
+/* 9:16 gives the captions more headroom. Not comped. */
 #frame[data-layout="9x16"] {
   --brain-h: 47%;
   --band-h: 13%;

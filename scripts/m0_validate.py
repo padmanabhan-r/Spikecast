@@ -167,7 +167,7 @@ def cmd_sugar(args) -> None:
     save(
         "sugar",
         {
-            "criterion": "PLAN.md M0: firing-rate correlation with the reference, r >= 0.9",
+            "criterion": "Project plan, M0: firing-rate correlation with the reference, r >= 0.9",
             **result,
             "passes_r_0.9": result["pearson_r"] >= 0.9,
             "trials": {"ours": args.trials, "reference": ref_trials},
@@ -202,7 +202,7 @@ def cmd_fastdt(args) -> None:
     save(
         "fastdt",
         {
-            "criterion": "PLAN.md 7: 0.5 ms allowed only if r >= 0.9 against 0.1 ms",
+            "criterion": "Project plan: 0.5 ms allowed only if r >= 0.9 against 0.1 ms",
             **result,
             "passes_r_0.9": result["pearson_r"] >= 0.9,
             "active_neurons": {
@@ -268,7 +268,7 @@ def cmd_benchmark(args) -> None:
         {
             "protocol": f"{args.ms:.0f} ms of brain time after a 50 ms warm-up, inputs at 150 Hz; "
             "scenarios alternate within each repeat. Run alone: these are wall-clock timings.",
-            "target": "PLAN.md 7: >= 0.25x real time for live mode",
+            "target": "Project plan: >= 0.25x real time for live mode",
             "rows": rows,
             "meta": run_meta(machine="Apple M4, 16 GB"),
         },

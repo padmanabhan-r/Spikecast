@@ -144,7 +144,7 @@ The whole ledger, with caveats, is [docs/REAL_VS_MODELLED.md](docs/REAL_VS_MODEL
 
 ## Where things are
 
-`spikecast/` the Python package: engine, world, sensors, motor, narration, simulation, server · `web/` the viewer, in TypeScript and three.js · `config/` constants, circuits, scenarios, each with its source · `scripts/` data and experiment scripts · `docs/` the explainer, the ledger and the reports · `PLAN.md` the spec.
+`spikecast/` the Python package: engine, world, sensors, motor, narration, simulation, server · `web/` the viewer, in TypeScript and three.js · `config/` constants, circuits, scenarios, each with its source · `scripts/` data and experiment scripts · `docs/` the explainer, the ledger and the reports.
 
 ## Credits and licences
 

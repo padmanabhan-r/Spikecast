@@ -2,7 +2,7 @@
 
 This file is the project's honesty ledger. Anything the viewer, the narrator or the README presents as "real" must appear in the first table. Everything else is modelled and is labelled that way in the UI. Update it in the same change that adds or alters a sensor, a motor mapping, a plasticity rule or a narrator claim.
 
-Status column: **planned** = specified in PLAN.md, not built; **built** = in the code; **validated** = built and checked against a stated reference.
+Status column: **planned** = specified in the project plan, not built; **built** = in the code; **validated** = built and checked against a stated reference.
 
 ## Real (taken from published data)
 
