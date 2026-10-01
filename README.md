@@ -1,8 +1,37 @@
-# Spikecast
+<p align="center">
+  <a href="https://spikecast.vercel.app">
+    <img src="docs/cover.jpg" alt="Spikecast: a fly brain's wiring, switched on. The fly's brain, every point a neuron, lit where neurons are firing." width="100%">
+  </a>
+</p>
 
-A fly on a road, with a simulated brain, and Jev at the controls.
+<h1 align="center">Spikecast</h1>
 
-**[Open the demo](https://spikecast.vercel.app)** · [What is this, in plain language](docs/EXPLAINER.md) · [What is real and what is modelled](docs/REAL_VS_MODELLED.md) · [What was measured](docs/ROAD_REPORT.md)
+<p align="center"><b>A fly on a road, with a simulated brain, and Jev at the controls.</b></p>
+
+<p align="center">
+  <a href="https://spikecast.vercel.app"><img alt="Open the live demo" src="https://img.shields.io/badge/Live%20demo-spikecast.vercel.app-3fb6e0?style=for-the-badge&logo=vercel&logoColor=white&labelColor=05070d"></a>
+  <a href="docs/EXPLAINER.md"><img alt="What is this, in plain language" src="https://img.shields.io/badge/Explainer-in%20plain%20language-ff3fb4?style=for-the-badge&logo=readthedocs&logoColor=white&labelColor=05070d"></a>
+  <a href="docs/REAL_VS_MODELLED.md"><img alt="What is real and what is modelled" src="https://img.shields.io/badge/Ledger-real%20vs%20modelled-ffb02e?style=for-the-badge&logo=bookstack&logoColor=white&labelColor=05070d"></a>
+  <a href="docs/ROAD_REPORT.md"><img alt="What was measured" src="https://img.shields.io/badge/Report-what%20was%20measured-eaf2f7?style=for-the-badge&logo=googledocs&logoColor=white&labelColor=05070d"></a>
+</p>
+
+<p align="center">
+  <a href="LICENSE"><img alt="Licence: PolyForm Noncommercial 1.0.0, with attribution" src="https://img.shields.io/badge/licence-PolyForm%20Noncommercial%20%2B%20attribution-8a94a6"></a>
+  <a href="https://github.com/padmanabhan-r/Spikecast/commits/main"><img alt="Last commit" src="https://img.shields.io/github/last-commit/padmanabhan-r/Spikecast?color=3fb6e0"></a>
+  <a href="https://github.com/padmanabhan-r/Spikecast/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/padmanabhan-r/Spikecast?style=flat&color=ffb02e"></a>
+  <img alt="Python 3.12" src="https://img.shields.io/badge/Python-3.12-3776ab?logo=python&logoColor=white">
+  <img alt="PyTorch" src="https://img.shields.io/badge/PyTorch-spiking%20engine-ee4c2c?logo=pytorch&logoColor=white">
+  <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-viewer-3178c6?logo=typescript&logoColor=white">
+  <img alt="three.js" src="https://img.shields.io/badge/three.js-WebGL-000000?logo=threedotjs&logoColor=white">
+  <img alt="FastAPI" src="https://img.shields.io/badge/FastAPI-server-009688?logo=fastapi&logoColor=white">
+</p>
+
+<p align="center">
+  <a href="https://typesafe.ai"><img alt="Decisions by Jev, from TypeSafe AI" src="https://img.shields.io/badge/decisions-Jev%20by%20TypeSafe%20AI-ffb02e?labelColor=05070d"></a>
+  <a href="https://flywire.ai"><img alt="Wiring: FlyWire connectome, CC BY-NC 4.0" src="https://img.shields.io/badge/wiring-FlyWire%20connectome%20(CC%20BY--NC%204.0)-3fb6e0?labelColor=05070d"></a>
+  <a href="https://elevenlabs.io"><img alt="Voice by ElevenLabs" src="https://img.shields.io/badge/voice-ElevenLabs-eaf2f7?labelColor=05070d"></a>
+  <img alt="138,639 simulated neurons" src="https://img.shields.io/badge/neurons-138%2C639-ff3fb4?labelColor=05070d">
+</p>
 
 ![The road run: the fly, the decision Jev just made, the memory in the synapses, and the brain firing](docs/screenshots/road.jpg)
 
