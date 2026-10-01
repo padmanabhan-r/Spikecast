@@ -57,7 +57,7 @@ A point flashes when that neuron fires in the simulation.
 | White | the command neurons that move the body |
 
 The fine lines in the middle of the brain are single connections in the mushroom body, the
-fly's learning centre. When the fly learns, those lines fade.
+fly's main centre for learning about smells. When the fly learns, those lines fade.
 
 ## The road run, step by step
 
@@ -74,7 +74,7 @@ fly's learning centre. When the fly learns, those lines fade.
 4. **Honey, off to the side.** The brain reads that smell as attractive, and Jev goes out of
    its way to reach it.
 5. **A barrier.** There is no way round. The fly touches it, backs off and is stuck, and Jev
-   chooses take-off: the fly hops over. (The giant fiber, the escape neuron, is already
+   chooses take-off: the fly hops over. (The giant fiber, a fast-escape neuron, is already
    firing by then, driven by the barrier looming in view. It fires just as hard when the fly
    nears any obstacle; the fly only leaves the ground when Jev picks take-off.)
 
@@ -219,7 +219,7 @@ sessions/<name>/
 | Which neuron connects to which, and how many synapses | How pain and sugar reach the dopamine neurons: we drive them directly |
 | Whether a connection excites or inhibits (predicted from the transmitter) | The learning rule and its constants |
 | The neuron model and its constants (Shiu et al. 2024) | The fly's body, the road and everything on it |
-| The sugar-to-feeding pathway (sugar neurons to MN9) | Which command neuron fires: Jev chooses, and we drive it |
+| The sugar-to-feeding wiring (sugar neurons to MN9) | Which command neuron fires: Jev chooses, and we drive it |
 | The looming-detector-to-giant-fiber wiring | How the body turns command-neuron spikes into movement; a take-off needs Jev's choice as well as the giant fiber firing |
 | The smell-to-mushroom-body wiring | Calling output neurons "approach" or "avoid": our label, read from their dopamine wiring |
 
@@ -246,12 +246,15 @@ chemistry beyond the one learning rule. The full ledger is `docs/REAL_VS_MODELLE
   outcomes.
 - **Kenyon cells**: about 5,000 neurons across the two mushroom bodies. Each smell activates
   a small, partly overlapping set of them.
-- **Output neurons (MBONs)**: 96 neurons that read the Kenyon cells. Some are known to bias
+- **Output neurons (MBONs)**: 96 neurons in this connectome that read the Kenyon cells. Some are known to bias
   a fly towards or away from a smell.
 - **Dopamine neurons (PPL1, PAM)**: the teaching signals. PPL1 mostly carries punishment,
   PAM mostly reward.
-- **Command neurons**: neurons that descend from the brain and start a movement: DNp09
-  (walk), DNa02 (turn), MDN (back up), DNp01, the giant fiber (take off).
-- **MN9**: a motor neuron that lifts the proboscis, the opening move of feeding.
+- **Command neurons**: neurons that descend from the brain and can drive a movement when
+  activated: DNp09 (walk), DNa02 (steer, one of several steering neurons), MDN (back up),
+  DNp01, the giant fiber (fast take-off). "Command-like" is the careful term: in a real fly
+  each is one of several routes to its movement.
+- **MN9**: a motor neuron that lifts the first segment of the proboscis, the opening move of
+  feeding.
 - **Jev**: a decision model by TypeSafe AI that answers typed questions with a probability
   for each option.

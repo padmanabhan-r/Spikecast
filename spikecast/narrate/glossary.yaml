@@ -34,7 +34,7 @@ cells:
     nickname: the smell code
     role: >-
       Mushroom body neurons; each smell activates a small, partly overlapping set of them,
-      roughly one in ten.
+      roughly one in ten to one in twenty.
     status: real
     source: Aso et al. 2014; Honegger et al. 2011; Lin et al. 2014.
 
@@ -51,9 +51,9 @@ cells:
     source: >-
       Aso et al. 2014 (compartments, valence); Hige et al. 2015 (dopamine-gated depression of
       KC to MBON synapses). The approach/avoid split is our reading of the dopamine wiring:
-      it matches the best-studied types and mislabels others (MBON-gamma3, gamma3beta'1 and
-      beta'1 sit in reward zones yet drove attraction in Aso et al. 2014), and most of the 96
-      have no measured valence.
+      it matches the best-studied types and mislabels others (MBON-gamma3 and gamma3beta'1
+      sit in reward zones yet drove attraction in Aso et al. 2014), and most of the 96 have
+      no measured valence.
 
   mbon_avoid:
     name: avoid outputs
@@ -122,7 +122,7 @@ cells:
   dnp01:
     name: giant fiber
     aliases: [giant fibre, giant fiber neurons, giant fibers, DNp01]
-    nickname: the escape trigger
+    nickname: the fast-escape trigger
     role: A pair of giant descending neurons; when one fires, the fly launches its fastest take-off.
     status: real
     source: von Reyn et al. 2014; Tanouye & Wyman 1980.

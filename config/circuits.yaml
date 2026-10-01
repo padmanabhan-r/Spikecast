@@ -24,14 +24,14 @@ groups:
     select: {cell_class: gustatory, cell_sub_class: [sugar, sugar/low_salt]}
     expect: {min: 50, max: 65}
     status: real
-    role: Labellar taste neurons that detect sugar.
+    role: Labellar bristle taste neurons annotated as sugar-sensing (sugar or sugar/low-salt).
     source: Tastekin et al. 2026 (taste modality annotation); Shiu et al. 2024 (sugar to MN9).
 
   bitter_grn:
     select: {cell_class: gustatory, cell_sub_class: bitter}
     expect: {min: 35, max: 50}
     status: real
-    role: Labellar taste neurons that detect bitter compounds.
+    role: Labellar bristle taste neurons annotated as bitter-sensing.
     source: Tastekin et al. 2026.
 
   # The two odors are synthetic. Each is a fixed set of glomeruli chosen by us from those that
@@ -153,16 +153,18 @@ groups:
     split_by_side: true
     expect: {min: 2, max: 2}
     status: real
-    role: Descending neurons that steer walking toward their own side.
-    source: Rayshubskiy et al. 2020.
+    role: Descending neurons that steer walking toward their own side; one of several steering types.
+    source: Rayshubskiy et al. 2024 (eLife).
 
   dnp09:
     select: {cell_type: DNp09}
     split_by_side: true
     expect: {min: 2, max: 2}
     status: real
-    role: Descending neurons that drive forward walking.
-    source: Bidaye et al. 2020.
+    role: >-
+      Descending neurons that drive forward walking with a turn to their own side; also
+      needed for freezing. Driving both for "walk forward" is our model's choice.
+    source: Bidaye et al. 2020; Zacarias et al. 2018.
 
   mdn:
     select: {cell_type: MDN}
@@ -176,7 +178,7 @@ groups:
     split_by_side: true
     expect: {min: 2, max: 2}
     status: real
-    role: The giant fiber, which triggers escape takeoff.
+    role: The giant fiber, which triggers the fastest escape takeoff.
     source: von Reyn et al. 2014.
 
   mn9:
@@ -186,5 +188,5 @@ groups:
     expect: {min: 2, max: 2}
     anchor_root_ids: [720575940660219265]
     status: real
-    role: Motor neuron 9, which extends the proboscis to feed.
+    role: Motor neuron 9, which lifts the rostrum, the first step of proboscis extension.
     source: Shiu et al. 2024.
