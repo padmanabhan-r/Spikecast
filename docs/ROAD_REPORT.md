@@ -40,7 +40,9 @@ from that smell's Kenyon cells: 1 is untouched, and 0.05 is the floor of the lea
 - Every run's provenance marks the code as modified (`git_dirty`). The five runs in the table
   were made from one working tree just before the fix was committed (recorded commit
   `d8c18ad`); the control was made later, with wording changes to captions and documents not
-  yet committed (recorded commit `b6b283f`). None can be tied to an exact commit.
+  yet committed (recorded commit `b6b283f`). None can be tied to an exact commit. Both
+  hashes are from the project's history before it was published: those commits were folded
+  into the first commit of this repository, so they cannot be looked up here.
 
 ## Control: the same run with learning switched off
 
