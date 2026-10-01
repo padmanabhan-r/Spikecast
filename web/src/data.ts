@@ -66,6 +66,23 @@ export class Session {
     return this.meta.n_frames;
   }
 
+  /** The last decision made at or before a frame, if there has been one. */
+  lastDecision(index: number): unknown[] | null {
+    const column = this.columns.decision;
+    for (let i = Math.min(index, this.frameCount - 1); column && i >= 0; i--) {
+      if (column[i]) return column[i] as unknown[];
+    }
+    return null;
+  }
+
+  /** How many decisions the recording holds up to and including a frame. */
+  decisionsThrough(index: number): number {
+    const column = this.columns.decision;
+    let count = 0;
+    for (let i = Math.min(index, this.frameCount - 1); column && i >= 0; i--) if (column[i]) count++;
+    return count;
+  }
+
   frame(index: number): Frame {
     const { meta } = this;
     const sceneIndex = this.columns.scene[index] as number;

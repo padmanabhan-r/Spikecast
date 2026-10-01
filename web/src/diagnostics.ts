@@ -83,7 +83,7 @@ export class Diagnostics {
 
     METERS.forEach((m, i) => {
       const value = f.world[m.key];
-      this.bars[i].fill.style.width = `${Math.round(value * 100)}%`;
+      this.bars[i].fill.style.setProperty("--fill", value.toFixed(2));
       this.bars[i].value.textContent = `${Math.round(value * 100)}%`;
     });
   }

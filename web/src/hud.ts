@@ -93,6 +93,31 @@ export class Hud {
     this.beatIndex = -1;
   }
 
+  /** What the driver chose, and how sure it was. Called once for each decision made. */
+  decided(decision: unknown[]): void {
+    const [action, probabilities, driver] = decision as [string, Record<string, number>, string];
+    this.decisions++;
+    this.who.textContent = driver === "jev" ? "Jev decides" : "Coded rules decide (Jev offline)";
+    for (const [key, bar] of this.bars) {
+      const p = probabilities[key] ?? 0;
+      bar.fill.style.setProperty("--fill", p.toFixed(2));
+      bar.row.classList.toggle("chosen", key === action);
+    }
+    if (this.action.dataset.action !== action) {
+      this.action.dataset.action = action;
+      this.action.textContent = ACTIONS[action]?.label ?? action;
+      this.neuron.textContent = ACTIONS[action]?.neuron ?? "";
+      this.action.classList.remove("hit");
+      void this.action.offsetWidth;
+      this.action.classList.add("hit");
+    }
+  }
+
+  /** The film cuts across the recording, so it sets the count from the recording itself. */
+  setCount(decisions: number): void {
+    this.decisions = decisions;
+  }
+
   update(f: Frame, dt: number): void {
     const w = f.world;
 
@@ -107,27 +132,7 @@ export class Hud {
       }
     }
 
-    // What the driver chose, and how sure it was.
     this.hold = Math.max(0, this.hold - dt);
-    const decision = w.decision as [string, Record<string, number>, string] | null | undefined;
-    if (decision) {
-      const [action, probabilities, driver] = decision;
-      this.decisions++;
-      this.who.textContent = driver === "jev" ? "Jev decides" : "Coded rules decide (Jev offline)";
-      for (const [key, bar] of this.bars) {
-        const p = probabilities[key] ?? 0;
-        bar.fill.style.width = `${Math.round(p * 100)}%`;
-        bar.row.classList.toggle("chosen", key === action);
-      }
-      if (this.action.dataset.action !== action) {
-        this.action.dataset.action = action;
-        this.action.textContent = ACTIONS[action]?.label ?? action;
-        this.neuron.textContent = ACTIONS[action]?.neuron ?? "";
-        this.action.classList.remove("hit");
-        void this.action.offsetWidth;
-        this.action.classList.add("hit");
-      }
-    }
 
     // Memory: what the synapses say about each smell. Left of centre is aversive, right is
     // attractive; the knob moves only when synapses in the spiking brain change.

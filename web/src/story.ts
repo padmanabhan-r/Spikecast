@@ -15,7 +15,7 @@ const PARTS: { anchor: string; label: string; tone: string; at: [number, number]
   { anchor: "mushroom_body_right", label: "memory", tone: "odor-a", at: [0.8, 0.2], level: (f) => (f.rates.kc ?? 0) / 0.6 },
   { anchor: "dopamine_punish", label: "punishment signal", tone: "punish", at: [0.2, 0.14], level: (f) => (f.rates.ppl1 ?? 0) / 60 },
   { anchor: "antennal_lobe", label: "smell comes in", tone: "rest", at: [0.17, 0.82], level: (f) => Math.max(f.rates.odor_a_pn ?? 0, f.rates.odor_b_pn ?? 0) / 60 },
-  { anchor: "giant_fiber", label: "escape trigger", tone: "escape", at: [0.83, 0.84], level: (f) => Math.max((f.rates.dnp01 ?? 0) / 20, (f.rates.lplc2 ?? 0) / 40) },
+  { anchor: "giant_fiber", label: "fast-escape trigger", tone: "escape", at: [0.83, 0.84], level: (f) => Math.max((f.rates.dnp01 ?? 0) / 20, (f.rates.lplc2 ?? 0) / 40) },
 ];
 
 const SVG = "http://www.w3.org/2000/svg";
@@ -96,6 +96,22 @@ export class Story {
     return "Walking in clean air.";
   }
 
+  /** What the rule read from the brain, and what it chose. Called once for each decision. */
+  decided(decision: unknown[]): void {
+    const [choice, pTurn, approach, avoid] = decision as [string, number, number, number];
+    const turn = choice === "turn_back";
+    this.jevChoice.textContent = turn ? "Turn back" : "Walk on";
+    this.jevFill.style.setProperty("--fill", (turn ? pTurn : 1 - pTurn).toFixed(2));
+    this.jevFill.parentElement!.dataset.pct = `${Math.round((turn ? pTurn : 1 - pTurn) * 100)}%`;
+    this.jevReads.textContent = `reads: approach ${approach.toFixed(1)}, avoid ${avoid.toFixed(1)} spikes a second`;
+    this.jev.dataset.choice = turn ? "turn" : "walk";
+    this.jevHold = 1.6;
+    // Retrigger the arrival so every decision lands as its own beat.
+    this.jev.classList.remove("hit");
+    void this.jev.offsetWidth;
+    this.jev.classList.add("hit");
+  }
+
   update(f: Frame, dt: number): void {
     const w = f.world;
     const scene = this.meta.scenes[f.sceneIndex];
@@ -163,28 +179,13 @@ export class Story {
       slot.line.style.opacity = String(0.25 + 0.6 * slot.level);
     });
 
-    // The pilot: what it read from the brain, and what it chose.
     this.jevHold = Math.max(0, this.jevHold - dt);
-    if (w.decision) {
-      const [choice, pTurn, approach, avoid] = w.decision as [string, number, number, number];
-      const turn = choice === "turn_back";
-      this.jevChoice.textContent = turn ? "Turn back" : "Walk on";
-      this.jevFill.style.width = `${Math.round((turn ? pTurn : 1 - pTurn) * 100)}%`;
-      this.jevFill.dataset.pct = `${Math.round((turn ? pTurn : 1 - pTurn) * 100)}%`;
-      this.jevReads.textContent = `reads: approach ${approach.toFixed(1)}, avoid ${avoid.toFixed(1)} spikes a second`;
-      this.jev.dataset.choice = turn ? "turn" : "walk";
-      this.jevHold = 1.6;
-      // Retrigger the arrival so every decision lands as its own beat.
-      this.jev.classList.remove("hit");
-      void this.jev.offsetWidth;
-      this.jev.classList.add("hit");
-    }
     this.jev.classList.toggle("on", this.jevHold > 0);
 
     // What the brain has stored about the pink smell: how far its "approach" synapses have
     // been turned down. 100% strength is no opinion; the floor of the learning rule is 5%.
     const strength = w.a_approach;
-    this.memoryFill.style.width = `${Math.round((1 - strength) * 100)}%`;
+    this.memoryFill.style.setProperty("--fill", (1 - strength).toFixed(2));
     this.memoryValue.textContent = `${Math.round(strength * 100)}%`;
     this.memoryWord.textContent = strength > 0.93 ? "no opinion yet" : strength > 0.7 ? "learning: bad" : "learned: bad";
 

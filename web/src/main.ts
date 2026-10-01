@@ -292,6 +292,7 @@ async function main(): Promise<void> {
 
   let latest: Frame | null = null;
   let shownScene = -1;
+  let decidedAt = -1;
   function apply(f: Frame, dt: number): void {
     if (replayName && f.sceneIndex !== shownScene) {
       shownScene = f.sceneIndex;
@@ -299,6 +300,13 @@ async function main(): Promise<void> {
       show(sceneLabel, true);
     }
     latest = f;
+    // A decision rides on one recorded frame, and a drawn frame may cover several of them or
+    // show one twice, so it is handed over here, exactly once.
+    if (f.world.decision && f.index !== decidedAt) {
+      decidedAt = f.index;
+      hud?.decided(f.world.decision);
+      if (frame.dataset.layout === "story") story?.decided(f.world.decision);
+    }
     brain.applyFrame(f, dt);
     arena.applyFrame(f, dt);
     director.update(f, dt);
@@ -382,6 +390,8 @@ async function main(): Promise<void> {
             // A cut: start a few frames early so the brain is already lit, with a clean trail.
             cursor = Math.max(-1, target - 8);
             if (arena instanceof RoadView) arena.clear();
+            const standing = session.lastDecision(cursor);
+            if (standing) hud?.decided(standing);
           }
           if (target === cursor) {
             // Slow motion: the same recorded frame again, with no new spikes.
@@ -391,6 +401,7 @@ async function main(): Promise<void> {
             for (let i = cursor + 1; i <= target; i++) apply(session.frame(i), step / count);
             cursor = target;
           }
+          hud?.setCount(session.decisionsThrough(target));
           render(step);
           captions.at(t);
           pinAnimations(t);
@@ -488,6 +499,7 @@ async function main(): Promise<void> {
       socket.send({ cmd: "reset" });
       if (arena instanceof RoadView) arena.clear();
       hud?.reset();
+      decidedAt = -1;
     };
     let last = performance.now();
     const tick = (now: number) => {

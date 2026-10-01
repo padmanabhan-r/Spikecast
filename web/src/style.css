@@ -212,20 +212,22 @@ body {
   color: var(--ink);
 }
 
+/* Every meter fills by sliding inside its clipped track: no layout while it moves. */
 #hud-bars i {
   display: block;
   height: 0.42em;
   border-radius: 999px;
+  overflow: hidden;
   background: color-mix(in srgb, var(--ink) 10%, transparent);
 }
 
 #hud-bars b {
   display: block;
-  width: 0;
+  transform: translateX(calc((var(--fill, 0) - 1) * 100%));
   height: 100%;
   border-radius: 999px;
   background: color-mix(in srgb, var(--ink) 45%, transparent);
-  transition: width 220ms var(--ease-out);
+  transition: transform 220ms var(--ease-out);
 }
 
 #hud-bars .chosen b {
@@ -709,20 +711,20 @@ body {
   background: color-mix(in srgb, var(--ink) 12%, transparent);
 }
 
+/* Clipped, not slid: the track cannot hide its overflow, because the figure sits above it. */
 #jev-fill {
   display: block;
-  width: 0;
   height: 100%;
-  border-radius: 999px;
   background: var(--ink);
-  transition: width 300ms var(--ease-out);
+  clip-path: inset(0 calc((1 - var(--fill, 0)) * 100%) 0 0 round 999px);
+  transition: clip-path 300ms var(--ease-out);
 }
 
 #jev[data-choice="turn"] #jev-fill {
   background: var(--odor-a);
 }
 
-#jev-fill::after {
+#jev i::after {
   content: attr(data-pct);
   position: absolute;
   right: 0;
@@ -779,11 +781,11 @@ body {
 
 #memory b {
   display: block;
-  width: 0;
+  transform: translateX(calc((var(--fill, 0) - 1) * 100%));
   height: 100%;
   border-radius: 999px;
   background: var(--odor-a);
-  transition: width 900ms var(--ease-in-out);
+  transition: transform 900ms var(--ease-in-out);
 }
 
 #memory strong {
@@ -1234,14 +1236,16 @@ canvas {
 .meter i {
   display: block;
   height: 0.45em;
+  overflow: hidden;
   background: color-mix(in srgb, var(--ink) 12%, transparent);
 }
 
 .meter i b {
   display: block;
   height: 100%;
+  transform: translateX(calc((var(--fill, 0) - 1) * 100%));
   background: var(--meter, var(--neuron-rest));
-  transition: width 900ms var(--ease-in-out);
+  transition: transform 900ms var(--ease-in-out);
 }
 
 #status {
