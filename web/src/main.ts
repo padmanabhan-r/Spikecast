@@ -43,6 +43,11 @@ interface SessionInfo {
   narrated: boolean;
 }
 
+// The hosted copy is the viewer and its recordings, with no simulation behind it: the live
+// brain needs the Python app and the connectome on a machine. (scripts/export_site.py)
+const HOSTED = import.meta.env.VITE_HOSTED === "1";
+const REPO = "https://github.com/padmanabhan-r/Spikecast";
+
 /** The home screen: what this is, and the ways in. A recorded run plays behind it. */
 async function runHome(brain: BrainView): Promise<void> {
   const sessions: SessionInfo[] = await fetch("/api/sessions")
@@ -70,11 +75,19 @@ async function runHome(brain: BrainView): Promise<void> {
       `A recorded run, ${Math.round(road.seconds)} seconds. The fly meets toxic waste, then honey, then both again, then a barrier across the road. ${road.pilot === "jev" ? "Jev picks every action." : "Coded rules pick every action; add a key and record again to have Jev drive."}`,
     );
   }
-  item(
-    "/?live=1",
-    "Drive it yourself",
-    "The simulation runs now, on this machine. Drop honey, toxic waste or a barrier in the fly's path, or hold V and tell it what to do.",
-  );
+  if (HOSTED) {
+    item(
+      REPO,
+      "Drive it yourself, on your machine",
+      "This page plays recordings. The live brain needs the simulation running: clone the repo and run ./start.sh, then drop honey, toxic waste or a barrier in the fly's path, or tell it what to do by voice.",
+    );
+  } else {
+    item(
+      "/?live=1",
+      "Drive it yourself",
+      "The simulation runs now, on this machine. Drop honey, toxic waste or a barrier in the fly's path, or hold V and tell it what to do.",
+    );
+  }
   if (maze) {
     item(
       "/?replay=story",
@@ -520,7 +533,7 @@ async function main(): Promise<void> {
             : "A fixed rule turned the fly around; nothing told it which smell was which. The smells, the shock signal, the body and the learning rule are modelled; the wiring is the mapped one, with three groups of connections switched off.";
           showCard("That was one run.", closing, [
             ["Watch again", () => restart()],
-            ["Drive the live brain", () => location.assign("/?live=1")],
+            HOSTED ? ["Run it yourself", () => location.assign(REPO)] : ["Drive the live brain", () => location.assign("/?live=1")],
             ["What is this?", () => location.assign("/explain.html")],
           ]);
         }
@@ -540,8 +553,9 @@ async function main(): Promise<void> {
         const hint = isRoad
           ? "Live. Drop something in the fly's path and watch what its brain makes of it."
           : "Live. The brain is quiet until something reaches it: release a smell, then add a shock or sugar and watch the bars.";
-        status.textContent = open ? hint : "Not connected. Start the app with ./start.sh";
-        if (isRoad) hud?.say(open ? "Drop something in its path, or hold <b>V</b> and tell it what to do." : "Not connected. Start the app with ./start.sh");
+        const offline = HOSTED ? "The live brain is not hosted here. Clone the repo and run ./start.sh." : "Not connected. Start the app with ./start.sh";
+        status.textContent = open ? hint : offline;
+        if (isRoad) hud?.say(open ? "Drop something in its path, or hold <b>V</b> and tell it what to do." : offline);
       },
       isRoad ? "road" : "dish",
     );

@@ -1,6 +1,8 @@
 # Data and recordings: never commit (see DATA_LICENSE.md)
 data/
 sessions/
+# The hosted copy carries recordings too (scripts/export_site.py)
+site/
 
 # Secrets
 .env

@@ -78,7 +78,7 @@ function titleCase(key: string): string {
 function question(data: FilmData, brain: BrainView): Scene {
   const s = data.sentences;
   // On screen from the first frame, for a viewer with the sound off.
-  const tag = el("p", "tag", "A fruit fly’s brain, simulated from its real wiring <i>·</i> a decision model at the controls");
+  const tag = el("p", "tag", "A Jev project <i>·</i> a decision model at the controls of a simulated fruit fly brain");
   return {
     captions: "hero",
     // The first spikes after a smell arrives, slowed eight times: a signal crossing the brain.
