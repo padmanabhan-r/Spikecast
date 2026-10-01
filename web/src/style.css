@@ -963,15 +963,37 @@ body {
   display: none;
 }
 
+/* The home page fits the window it is given: its type scales with the window's height as
+   well as its width, and if it still cannot fit (a phone on its side) it scrolls from the
+   top instead of being cut off above and below. */
 #home {
   position: absolute;
   inset: 0 auto 0 0;
   width: min(100%, 46rem);
-  padding: clamp(1.5rem, 6vw, 5rem);
+  padding: clamp(1rem, 5vh, 5rem) clamp(1.5rem, 6vw, 5rem);
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  gap: 1.4rem;
+  justify-content: safe center;
+  gap: min(1.4rem, 2.2vh);
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--ink) 25%, transparent) transparent;
+}
+
+#home > * {
+  flex: none;
+}
+
+/* A short window keeps the credit and drops the aside. */
+@media (max-height: 700px) {
+  #home {
+    padding-block: 3vh;
+    gap: 1.6vh;
+  }
+
+  #home-note {
+    display: none;
+  }
 }
 
 #home .kicker {
@@ -981,14 +1003,14 @@ body {
 
 #home h1 {
   font-weight: 500;
-  font-size: clamp(2rem, 4.4vw, 3.6rem);
+  font-size: clamp(1.5rem, min(4.4vw, 6.2vh), 3.6rem);
   line-height: 1.04;
   letter-spacing: -0.025em;
   text-wrap: balance;
 }
 
 #home .lede {
-  font-size: clamp(1rem, 1.5vw, 1.2rem);
+  font-size: clamp(0.86rem, min(1.5vw, 2.05vh), 1.2rem);
   line-height: 1.5;
   color: var(--ink-dim);
   max-width: 34em;
@@ -998,13 +1020,13 @@ body {
   list-style: none;
   padding: 0;
   display: grid;
-  gap: 1.1rem;
-  margin-top: 0.6rem;
+  gap: min(1.1rem, 1.8vh);
+  margin-top: min(0.6rem, 1vh);
 }
 
 #home li a {
   font-weight: 500;
-  font-size: clamp(1.15rem, 1.9vw, 1.5rem);
+  font-size: clamp(1rem, min(1.9vw, 2.6vh), 1.5rem);
   color: var(--ink);
   text-decoration: none;
   border-bottom: 1px solid color-mix(in srgb, var(--neuron-rest) 60%, transparent);
@@ -1025,14 +1047,15 @@ body {
 }
 
 #home li p {
-  margin-top: 0.45rem;
+  margin-top: min(0.45rem, 0.7vh);
+  font-size: clamp(0.8rem, min(1.25vw, 1.72vh), 1rem);
   color: var(--ink-dim);
   line-height: 1.45;
   max-width: 36em;
 }
 
 #home .fine {
-  font-size: 0.85rem;
+  font-size: clamp(0.72rem, 1.45vh, 0.85rem);
   font-style: italic;
   color: color-mix(in srgb, var(--ink-dim) 80%, transparent);
 }

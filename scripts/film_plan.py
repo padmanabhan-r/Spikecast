@@ -215,7 +215,7 @@ def main() -> int:
         elif section == "how":
             data["facts"] = voice_example()
         elif section == "close":
-            data["facts"] = {"repo": REPO}
+            data["facts"] = {}
         (OUT / f"{section}.json").write_text(json.dumps(data, indent=1) + "\n")
         total += data["length"]
     print(f"film: {total:.1f} s")

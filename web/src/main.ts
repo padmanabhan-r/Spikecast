@@ -72,34 +72,34 @@ async function runHome(brain: BrainView): Promise<void> {
     item(
       "/?replay=road",
       "Watch the road run",
-      `A recorded run, ${Math.round(road.seconds)} seconds. The fly meets toxic waste, then honey, then both again, then a barrier across the road. ${road.pilot === "jev" ? "Jev picks every action." : "Coded rules pick every action; add a key and record again to have Jev drive."}`,
+      `A recorded run, ${Math.round(road.seconds)} seconds: toxic waste, honey, both again, then a barrier. ${road.pilot === "jev" ? "Jev picks every action." : "Coded rules pick every action; add a key and record again to have Jev drive."}`,
     );
   }
   if (HOSTED) {
     item(
       REPO,
       "Drive it yourself, on your machine",
-      "This page plays recordings. The live brain needs the simulation running: clone the repo and run ./start.sh, then drop honey, toxic waste or a barrier in the fly's path, or tell it what to do by voice.",
+      "This page plays recordings. For the live brain, clone the repo and run ./start.sh: then drop things in the fly's path, or tell it what to do by voice.",
     );
   } else {
     item(
       "/?live=1",
       "Drive it yourself",
-      "The simulation runs now, on this machine. Drop honey, toxic waste or a barrier in the fly's path, or hold V and tell it what to do.",
+      "The simulation runs now, on this machine. Drop things in the fly's path, or hold V and tell it what to do.",
     );
   }
   if (maze) {
     item(
       "/?replay=story",
       "Second experiment: the maze",
-      "Modelled on the classic fly memory test. One fly is tested before and after one bad experience, beside a twin with learning switched off.",
+      "Modelled on the classic fly memory test: one fly, before and after one bad experience, beside a twin with learning off.",
     );
   }
   if (await fetch("/explain.html", { method: "HEAD" }).then((r) => r.ok).catch(() => false)) {
     item(
       "/explain.html",
       "What is this?",
-      "A plain-language explanation: for anyone, for people who know language models, and for builders.",
+      "A plain-language explanation, at three levels.",
     );
   }
   $("home-note").textContent = pick

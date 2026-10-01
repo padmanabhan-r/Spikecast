@@ -343,7 +343,6 @@ function how(data: FilmData, brain: BrainView): Scene {
 }
 
 function close(data: FilmData, brain: BrainView): Scene {
-  const f = data.facts ?? {};
   const s = data.sentences;
   const ledger = el("div", "ledger");
   const real = el(
@@ -366,7 +365,7 @@ function close(data: FilmData, brain: BrainView): Scene {
   const end = el(
     "div",
     "endcard",
-    `<h1>Spikecast</h1><p class="repo"><span>Open the repo</span>${f.repo}</p><p class="credits">FlyWire <i>·</i> Jev by TypeSafe AI <i>·</i> ElevenLabs</p><p class="cite">Connectome: Dorkenwald et al. 2024, Schlegel et al. 2024 (CC BY-NC 4.0). Neuron model: Shiu et al. 2024.</p>`,
+    `<h1>Spikecast</h1><p class="repo">a fly brain’s wiring, switched on</p><p class="credits">FlyWire <i>·</i> Jev by TypeSafe AI <i>·</i> ElevenLabs</p><p class="cite">Connectome: Dorkenwald et al. 2024, Schlegel et al. 2024 (CC BY-NC 4.0). Neuron model: Shiu et al. 2024.</p>`,
   );
   const tLines = [s[2].start, s[3].start, s[4].start];
   const tEnd = s[5].start;
