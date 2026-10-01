@@ -7,7 +7,8 @@ No simulation runs on the host. The live brain needs this repo, the connectome a
 app on a machine, so the hosted pages play recordings and point here for the rest.
 
 The export carries neuron positions and recorded spikes derived from the FlyWire connectome
-(CC BY-NC 4.0): it is for non-commercial hosting, with the attribution the pages show.
+(CC BY-NC 4.0). Host it only without commercial purpose; the pages credit the data and
+DATA_LICENSE.md has the full citations.
 site/ is ignored by git, like data/ and sessions/.
 """
 

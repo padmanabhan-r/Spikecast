@@ -92,7 +92,7 @@ async function runHome(brain: BrainView): Promise<void> {
     item(
       "/?replay=story",
       "Second experiment: the maze",
-      "The classic memory test. The same fly is tested before and after one bad experience, beside a twin with learning switched off.",
+      "Modelled on the classic fly memory test. One fly is tested before and after one bad experience, beside a twin with learning switched off.",
     );
   }
   if (await fetch("/explain.html", { method: "HEAD" }).then((r) => r.ok).catch(() => false)) {

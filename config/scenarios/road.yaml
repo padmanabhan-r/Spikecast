@@ -9,7 +9,7 @@ frame_hz: 60
 max_s: 130
 beats:
   - step: Naive
-    caption: A fly with a real fly's brain, running as a simulation. It walks forward.
+    caption: A fly with a simulated brain, wired as a real fly's was mapped. It walks forward.
     say: A fly with a simulated brain.
     wait_s: 3.5
   - caption: Toxic waste on the road. It has never smelled this before.

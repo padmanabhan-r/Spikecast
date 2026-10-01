@@ -30,9 +30,10 @@ if [ ! -f data/derived/W_csr.pt ]; then
 fi
 [ -f data/derived/viewer.json ] || uv run python scripts/build_viewer_data.py >/dev/null
 
-if ! ls sessions/*/meta.json >/dev/null 2>&1; then
-  echo "==> No recorded run yet: recording the experiment once (about two minutes)"
-  uv run spikecast record dev --dt 0.5 --out sessions/experiment
+if [ ! -f sessions/road/meta.json ]; then
+  echo "==> No recorded road run yet: recording it once (about three minutes)"
+  echo "    Jev drives if OPENROUTER_API_KEY is set in .env.local; otherwise the coded rules do."
+  uv run spikecast record road --dt 0.5
 fi
 
 echo "==> Starting Spikecast"

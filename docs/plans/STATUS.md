@@ -13,7 +13,8 @@ exists now.
 | The maze: before and after, with a learning-off twin | built; one paired recording | `sessions/story`, `sessions/story_off` (not committed) |
 | Viewer: home, road, maze, live, explainer | built | `web/` |
 | Commentary: script-voiced road run; Claude-written, rule-checked maze run | built | `spikecast/narrate/` |
-| The film | in production | `video/spikecast/` (its own local history, not in this repo) |
+| The film | cut; one independent review round applied | `video/spikecast/` (its own local history, not in this repo) |
+| A hosted copy: the viewer with the recorded runs, no simulation | deployed | https://spikecast.vercel.app, `scripts/export_site.py` |
 
 ## Not done, and said so
 
@@ -29,4 +30,5 @@ exists now.
   the film's narration) and its corrections applied. A dozen of its sources were not opened
   on the second pass, only recalled, and the paywalled ones were read as abstracts or
   mirrors. It is a careful reading, not a review by a fly neuroscientist.
-- **Publishing.** Commits are local. Nothing has been pushed; there is no remote.
+- **The hosted copy plays recordings only.** The live brain and spoken commands need the
+  Python app, the data and the keys on a machine.

@@ -285,7 +285,7 @@ function how(data: FilmData, brain: BrainView): Scene {
   const senses = node("n-senses", "Input neurons", "the world becomes spikes");
   const whole = node("n-brain", "The spiking brain", "138,639 neurons, real wiring");
   const memory = node("n-memory", "Mushroom body", "memory: synapses weaken");
-  const jevNode = node("n-jev", "Jev", "picks one of six actions");
+  const jevNode = node("n-jev", "Jev", "is told what the fly senses,<br>and one word from the brain");
   const command = node("n-command", "Command neuron", "DNp09 · DNa02<br>MDN · DNp01");
   const body = node("n-body", "The body", "walks, turns, feeds, jumps");
   const loop = el("div", "loop", "and the road changes what it senses next", flow);
